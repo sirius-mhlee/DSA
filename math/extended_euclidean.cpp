@@ -9,13 +9,14 @@
 
 using namespace std;
 
+template<typename value_type>
 class extended_euclidean
 {
 public:
-	long long gcd;
-	long long lcm;
-	long long x0;
-	long long y0;
+	value_type gcd;
+	value_type lcm;
+	value_type x0;
+	value_type y0;
 
 public:
 	extended_euclidean()
@@ -23,7 +24,7 @@ public:
 	{}
 
 public:
-	void process(long long a, long long b)
+	void process(value_type a, value_type b)
 	{
 		if (a < b) swap(a, b);
 
@@ -31,16 +32,16 @@ public:
 		lcm = a * b / gcd;
 	}
 
-	tuple<long long, long long, long long> inner_process(long long a, long long b)
+	tuple<value_type, value_type, value_type> inner_process(value_type a, value_type b)
 	{
 		if (b == 0) return make_tuple(a, 1, 0);
 
-		long long g, x, y;
+		value_type g, x, y;
 		tie(g, x, y) = inner_process(b, a % b);
 
 		return make_tuple(g, y, x - (a / b) * y);
 	}
 };
 
-//extended_euclidean ee;
+//extended_euclidean<long long> ee;
 //ee.process(a, b);
