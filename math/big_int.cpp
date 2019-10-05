@@ -65,4 +65,4 @@ public:
 };
 
 //big_int b1("1");
-//bool ret = geometry::intersect(p1, p2, p3, p4);
+//big_int ret = b1 + b2;
