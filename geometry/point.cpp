@@ -31,7 +31,7 @@ namespace geometry
 		value_type diff_x = lhs.x - rhs.x;
 		value_type diff_y = lhs.y - rhs.y;
 
-		if (diff_x > EPS || diff_x < -EPS || diff_y > EPS || diff_y < -EPS) return false;
+		if (diff_x > static_cast<value_type>(EPS) || diff_x < -static_cast<value_type>(EPS) || diff_y > static_cast<value_type>(EPS) || diff_y < -static_cast<value_type>(EPS)) return false;
 		return true;
 	}
 
@@ -41,9 +41,9 @@ namespace geometry
 		value_type diff_x = rhs.x - lhs.x;
 		value_type diff_y = rhs.y - lhs.y;
 
-		if (diff_x > EPS) return true;
-		else if (diff_x < -EPS) return false;
-		else if (diff_y > EPS) return true;
+		if (diff_x > static_cast<value_type>(EPS)) return true;
+		else if (diff_x < -static_cast<value_type>(EPS)) return false;
+		else if (diff_y > static_cast<value_type>(EPS)) return true;
 		return false;
 	}
 
