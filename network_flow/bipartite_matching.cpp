@@ -34,7 +34,7 @@ public:
 public:
 	void process()
 	{
-		for (int i = 0; i < adj.size(); i++)
+		for (int i = 0; i < (int)adj.size(); i++)
 		{
 			fill(visited.begin(), visited.end(), false);
 
