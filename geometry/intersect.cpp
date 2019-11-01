@@ -17,8 +17,8 @@ namespace geometry
 	{
 		value_type val = cross(vec<value_type>(a, b), vec<value_type>(a, c));
 
-		if (val > static_cast<value_type>(EPS)) return 1;
-		else if (val < -static_cast<value_type>(EPS)) return -1;
+		if (val > EPS) return 1;
+		else if (val < -EPS) return -1;
 		return 0;
 	}
 

@@ -36,6 +36,12 @@ namespace geometry
 	}
 
 	template<typename value_type>
+	bool operator !=(const point<value_type>& lhs, const point<value_type>& rhs)
+	{
+		return !(lhs == rhs);
+	}
+
+	template<typename value_type>
 	bool operator <(const point<value_type>& lhs, const point<value_type>& rhs)
 	{
 		value_type diff_x = rhs.x - lhs.x;
@@ -57,6 +63,21 @@ namespace geometry
 	bool operator >(const point<value_type>& lhs, const point<value_type>& rhs)
 	{
 		return (rhs < lhs);
+	}
+
+	template<typename value_type>
+	bool operator >=(const point<value_type>& lhs, const point<value_type>& rhs)
+	{
+		return !(lhs < rhs);
+	}
+
+	template<typename value_type>
+	value_type dist_square(const point<value_type>& lhs, const point<value_type>& rhs)
+	{
+		value_type diff_x = lhs.x - rhs.x;
+		value_type diff_y = lhs.y - rhs.y;
+
+		return (diff_x * diff_x) + (diff_y * diff_y);
 	}
 };
 
