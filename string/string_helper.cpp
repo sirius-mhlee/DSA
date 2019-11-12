@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <vector>
+
 using namespace std;
 
 namespace string_helper
@@ -38,7 +40,34 @@ namespace string_helper
 
 		return false;
 	}
+
+	template<typename value_type>
+	tuple<int, int> find_cycle(const vector<value_type>& sequence, int start, int limit)
+	{
+		while (start + 1 < limit)
+		{
+			for (int cycle_size = 1; cycle_size + start < limit; cycle_size++)
+			{
+				bool check = true;
+				for (int i = start; i + cycle_size < limit; i++)
+				{
+					if (sequence[i] != sequence[i + cycle_size])
+					{
+						check = false;
+						break;
+					}
+				}
+
+				if (check) return make_tuple(start, cycle_size);
+			}
+
+			start++;
+		}
+
+		return make_tuple(-1, -1);
+	}
 };
 
 //bool ret1 = string_helper::check_palindrome(s1);
 //bool ret2 = string_helper::starts_with(s1, s2);
+//tie(cycle_start, cycle_size) = string_helper::find_cycle(s, p, q);
