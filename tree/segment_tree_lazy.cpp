@@ -15,10 +15,24 @@ template<typename value_type>
 class segment_tree_lazy
 {
 public:
+    class lazy_info
+    {
+    public:
+        bool flag;
+
+        value_type val;
+
+    public:
+        lazy_info(bool _flag, value_type _val)
+            : flag(_flag), val(_val)
+        {}
+    };
+
+public:
     int data_count;
     vector<value_type> data_list;
 
-    vector<value_type> lazy;
+    vector<lazy_info> lazy;
     vector<value_type> tree;
 
 public:
@@ -29,7 +43,7 @@ public:
 
         int height = (int)ceil(log2(data_count));
         int tree_size = (1 << (height + 1));
-        lazy.assign(tree_size, 0);
+        lazy.assign(tree_size, lazy_info(false, 0));
         tree.assign(tree_size, 0);
     }
 
@@ -54,16 +68,20 @@ public:
 
     void propagate(int node, int start, int end)
     {
-        if (lazy[node] != 0)
+        if (lazy[node].flag)
         {
             if (start != end)
             {
-                lazy[node * 2] += lazy[node];
-                lazy[node * 2 + 1] += lazy[node];
+                lazy[node * 2].flag = true;
+                lazy[node * 2].val += lazy[node].val;
+
+                lazy[node * 2 + 1].flag = true;
+                lazy[node * 2 + 1].val += lazy[node].val;
             }
 
-            tree[node] += (end - start + 1) * lazy[node];
-            lazy[node] = 0;
+            tree[node] += (end - start + 1) * lazy[node].val;
+            lazy[node].flag = false;
+            lazy[node].val = 0;
         }
     }
 
@@ -84,7 +102,8 @@ public:
         if (right < start || end < left) return;
         if (left <= start && end <= right)
         {
-            lazy[node] += val;
+            lazy[node].flag = true;
+            lazy[node].val += val;
             propagate(node, start, end);
             return;
         }
