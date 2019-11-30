@@ -52,6 +52,8 @@ public:
 
     void process(int start, int end)
     {
+        fill(dist.begin(), dist.end(), INF);
+
         priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
         dist[start] = 0;
         pq.push(make_pair(0, start));
