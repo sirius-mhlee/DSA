@@ -20,38 +20,38 @@ public:
 
 public:
     class edge_info
-	{
-	public:
-		int to;
+    {
+    public:
+        int to;
 
-		value_type cost;
+        value_type cost;
 
-	public:
-		edge_info(int _to, value_type _cost)
-			: to(_to), cost(_cost)
-		{}
-	};
+    public:
+        edge_info(int _to, value_type _cost)
+            : to(_to), cost(_cost)
+        {}
+    };
 
 public:
     vector<vector<edge_info>> adj;
     vector<value_type> dist;
 
 public:
-	dijkstra(int vertex_count)
-		: adj(), dist()
-	{
-		adj.assign(vertex_count, vector<edge_info>());
+    dijkstra(int vertex_count)
+        : adj(), dist()
+    {
+        adj.assign(vertex_count, vector<edge_info>());
         dist.assign(vertex_count, INF);
-	}
+    }
 
 public:
-	void create_edge(int from, int to, value_type cost)
-	{
-		adj[from].push_back(edge_info(to, cost));
-	}
+    void create_edge(int from, int to, value_type cost)
+    {
+        adj[from].push_back(edge_info(to, cost));
+    }
 
     void process(int start, int end)
-	{
+    {
         priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
         dist[start] = 0;
         pq.push(make_pair(0, start));
