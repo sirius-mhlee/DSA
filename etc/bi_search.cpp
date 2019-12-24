@@ -51,4 +51,4 @@ public:
 };
 
 //bi_search<long long> bs(lo, hi);
-//int ret = bs.result;
+//long long ret = bs.result;
