@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <functional>
 
-#include <vector>
-
 using namespace std;
 
 template<typename value_type>
