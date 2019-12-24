@@ -21,7 +21,7 @@ public:
     bi_search(value_type lo, value_type hi)
         : result(0)
     {
-        while (lo + 1 < hi)
+        while (hi - lo >= 2)
         {
             value_type mid = (lo + hi) / 2;
 
