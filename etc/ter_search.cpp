@@ -49,4 +49,4 @@ public:
 };
 
 //ter_search<long long> ts(lo, hi);
-//int ret = ts.result;
+//long long ret = ts.result;
