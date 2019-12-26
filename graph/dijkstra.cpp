@@ -16,10 +16,10 @@ template<typename value_type>
 class dijkstra
 {
 public:
-    const value_type INF = 1e9;
+	const value_type INF = 1e9;
 
 public:
-    class edge_info
+	class edge_info
 	{
 	public:
 		int to;
@@ -33,15 +33,15 @@ public:
 	};
 
 public:
-    vector<vector<edge_info>> adj;
-    vector<value_type> dist;
+	vector<vector<edge_info>> adj;
+	vector<value_type> dist;
 
 public:
 	dijkstra(int vertex_count)
 		: adj(), dist()
 	{
 		adj.assign(vertex_count, vector<edge_info>());
-        dist.assign(vertex_count, INF);
+		dist.assign(vertex_count, INF);
 	}
 
 public:
@@ -50,33 +50,33 @@ public:
 		adj[from].push_back(edge_info(to, cost));
 	}
 
-    void process(int start, int end)
+	void process(int start, int end)
 	{
-        priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
-        dist[start] = 0;
-        pq.push(make_pair(0, start));
+		priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
+		dist[start] = 0;
+		pq.push(make_pair(0, start));
 
-        while (!pq.empty())
-        {
-            value_type curr_dist = pq.top().first;
-            int curr_node = pq.top().second;
-            pq.pop();
+		while (!pq.empty())
+		{
+			value_type curr_dist = pq.top().first;
+			int curr_node = pq.top().second;
+			pq.pop();
 
-            if (curr_dist > dist[curr_node]) continue;
+			if (curr_dist > dist[curr_node]) continue;
 
-            for (edge_info next : adj[curr_node])
-            {
-                int next_dist = curr_dist + next.cost;
-                int next_node = next.to;
+			for (edge_info next : adj[curr_node])
+			{
+				int next_dist = curr_dist + next.cost;
+				int next_node = next.to;
 
-                if (next_dist < dist[next_node])
-                {
-                    dist[next_node] = next_dist;
-                    pq.push(make_pair(next_dist, next_node));
-                }
-            }
-        }
-    }
+				if (next_dist < dist[next_node])
+				{
+					dist[next_node] = next_dist;
+					pq.push(make_pair(next_dist, next_node));
+				}
+			}
+		}
+	}
 };
 
 //dijkstra<int> ds(N);
