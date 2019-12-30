@@ -22,10 +22,6 @@ public:
 		int to;
 
 	public:
-		edge_info()
-			: from(-1), to(-1)
-		{}
-
 		edge_info(int _from, int _to)
 			: from(_from), to(_to)
 		{}
@@ -62,7 +58,7 @@ public:
 
 public:
 	bcc(int vertex_count)
-		: adj(), vertex_bcc_id(), bcc_group_edge(), dfs_visit_cnt(0), dfs_num(), s(), cut_vertex(), cut_edge()
+		: adj(), vertex_bcc_id(), bcc_group_edge(), dfs_visit_cnt(0), dfs_num(), s()
 	{
 		adj.assign(vertex_count, vector<int>());
 
