@@ -23,7 +23,7 @@ public:
 	vector<value_type> tree;
 
 public:
-	segment_tree(int _data_count = 0)
+	segment_tree(int _data_count)
 		: data_count(_data_count), data_idx(), data_list(), tree()
 	{
 		data_idx.assign(data_count, -1);
