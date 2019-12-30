@@ -37,10 +37,6 @@ public:
 		int to;
 
 	public:
-		edge_info()
-			: from(-1), to(-1)
-		{}
-
 		edge_info(int _from, int _to)
 			: from(_from), to(_to)
 		{}
