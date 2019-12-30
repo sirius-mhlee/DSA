@@ -58,7 +58,7 @@ public:
 
 public:
 	bcc(int vertex_count)
-		: adj(), vertex_bcc_id(), bcc_group_edge(), dfs_visit_cnt(0), dfs_num(), s()
+		: adj(), vertex_bcc_id(), bcc_group_edge(), dfs_visit_cnt(0), dfs_num(), s(), cut_vertex(), cut_edge()
 	{
 		adj.assign(vertex_count, vector<int>());
 
