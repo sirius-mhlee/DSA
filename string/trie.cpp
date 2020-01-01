@@ -22,8 +22,8 @@ public:
 		map<char, node_info*> child;
 
 	public:
-		node_info(bool _term)
-			: term(_term), child()
+		node_info()
+			: term(false), child()
 		{}
 	};
 
@@ -33,7 +33,7 @@ public:
 
 public:
 	trie()
-		: root_node(nullptr)
+		: root_node(nullptr), node_list()
 	{
 		root_node = init_node();
 	}
@@ -49,7 +49,7 @@ public:
 public:
 	node_info* init_node()
 	{
-		node_list.push_back(new node_info(false));
+		node_list.push_back(new node_info());
 		return node_list.back();
 	}
 
@@ -60,7 +60,7 @@ public:
 
 	void inner_insert(node_info* curr, int index, string& word)
 	{
-		if (index == word.size())
+		if (index == (int)word.size())
 		{
 			curr->term = true;
 			return;
@@ -81,7 +81,7 @@ public:
 
 	bool inner_find(node_info* curr, int index, string& word)
 	{
-		if (index == word.size())
+		if (index == (int)word.size())
 		{
 			if (curr->term) return true;
 
