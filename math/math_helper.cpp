@@ -11,6 +11,8 @@ using namespace std;
 
 namespace math_helper
 {
+	const double PI = acos(-1.0);
+
 	template<typename value_type>
 	value_type mod(value_type value, const value_type MOD)
 	{
@@ -20,3 +22,4 @@ namespace math_helper
 };
 
 //long long int mod_value = math_helper::mod<long long int>(value, MOD);
+//double pi_value = math_helper::PI;
