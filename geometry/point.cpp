@@ -10,7 +10,7 @@ using namespace std;
 
 namespace geometry
 {
-	const double EPS = 1e-9;
+	using namespace geometry_constant;
 
 	template<typename value_type>
 	class point
@@ -69,15 +69,6 @@ namespace geometry
 	bool operator >=(const point<value_type>& lhs, const point<value_type>& rhs)
 	{
 		return !(lhs < rhs);
-	}
-
-	template<typename value_type>
-	value_type dist_square(const point<value_type>& lhs, const point<value_type>& rhs)
-	{
-		value_type diff_x = lhs.x - rhs.x;
-		value_type diff_y = lhs.y - rhs.y;
-
-		return (diff_x * diff_x) + (diff_y * diff_y);
 	}
 };
 
