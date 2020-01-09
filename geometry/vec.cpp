@@ -26,4 +26,4 @@ namespace geometry
 	};
 };
 
-//geometry::vec<int> v1(0, 0);
+//geometry::vec<int> v1(p1, p2);
