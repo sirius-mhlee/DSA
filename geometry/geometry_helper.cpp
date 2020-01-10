@@ -153,6 +153,25 @@ namespace geometry_helper
 		}
 		return true;
 	}
+
+	template<typename value_type>
+	bool check_point_include(vector<point<value_type>> point_list, point<value_type> point)
+	{
+		bool positive = false;
+		bool negative = false;
+
+		for (int i = 0; i < (int)point_list.size(); i++)
+		{
+			int j = (i + 1) % (int)point_list.size();
+
+			int ccw_result = ccw(point_list[i], point_list[j], point);
+			if (ccw_result >= 0) positive = true;
+			else if (ccw_result < 0) negative = true;
+
+			if (positive && negative) return false;
+		}
+		return true;
+	}
 };
 
 //int dot_ret = geometry_helper::dot<int>(v1, v2);
@@ -162,4 +181,5 @@ namespace geometry_helper
 //int ccw_ret = geometry_helper::ccw<int>(p1, p2, p3);
 //bool intersect_ret = geometry_helper::intersect<int>(p1, p2, p3, p4);
 //long long area_ret = geometry_helper::area<long long>(point_list);
-//bool check_convex_ret = geometry_helper::area<int>(point_list);
+//bool check_convex_ret = geometry_helper::check_convex<int>(point_list);
+//bool check_point_include = geometry_helper::check_point_include<int>(point_list, point);
