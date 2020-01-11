@@ -25,14 +25,14 @@ public:
 		: data_list(), bucket_unit_size(0), bucket()
 	{
 		data_list.assign(data_count, 0);
+
+		bucket_unit_size = sqrt(data_count);
+		bucket.assign((data_count / bucket_unit_size) + 1, 0);
 	}
 
 public:
 	void init()
 	{
-		bucket_unit_size = sqrt((int)data_list.size());
-		bucket.assign(((int)data_list.size() / bucket_unit_size) + 1, 0);
-
 		for (int i = 0; i < (int)data_list.size(); i++)
 		{
 			bucket[i / bucket_unit_size] += data_list[i];
