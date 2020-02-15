@@ -37,7 +37,7 @@ public:
 
 		for (value_type i = 2; i <= limit; i++)
 		{
-			mod_inv[i] = (mod_value - ((mod_value / i) * mod_inv[mod_value % i] % mod_value)) % mod_value;
+			mod_inv[i] = mod_value - ((mod_value / i) * mod_inv[mod_value % i] % mod_value);
 			fact[i] = (fact[i - 1] * i) % mod_value;
 			fact_inv[i] = (fact_inv[i - 1] * mod_inv[i]) % mod_value;
 		}
