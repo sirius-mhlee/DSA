@@ -54,9 +54,21 @@ namespace math_helper
 
 		return factor_map;
 	}
+
+	template<typename value_type>
+	value_type fast_power(const value_type a, const value_type n)
+	{
+		if (n == 1) return a;
+
+		value_type ret = fast_power(a, n / 2);
+		ret = (ret * ret);
+		if (n % 2 != 0) ret = (a * ret);
+		return ret;
+	}
 };
 
 //double pi_value = math_helper::pi;
 //long long mod_value = math_helper::mod<long long>(value, mod);
 //long long mod_inverse_value = math_helper::mod_inverse<long long>(value, mod);
 //map<long long, int> factor_map = math_helper::factorization<long long>(value, prime_list);
+//long long power_value = math_helper::fast_power<long long>(value, power);
