@@ -46,9 +46,8 @@ public:
 public:
 	value_type process(const value_type& n, const value_type& r)
 	{
-		if (n < 0 || r < 0) return 0;
-		if (n < r) return 0;
-		if (n == r) return 1;
+		if (n < 0 || r < 0 || n < r) return 0;
+		if (n == r || r == 0) return 1;
 
 		return (fact[n] * (fact_inv[r] * fact_inv[n - r] % mod_value)) % mod_value;
 	}
