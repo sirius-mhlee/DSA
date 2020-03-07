@@ -18,14 +18,14 @@ public:
 	class node_info
 	{
 	public:
-		bool term;
+		int term;
 
 		map<char, node_info*> child;
 		node_info* fail;
 
 	public:
 		node_info()
-			: term(false), child(), fail(nullptr)
+			: term(0), child(), fail(nullptr)
 		{}
 	};
 
@@ -91,63 +91,60 @@ public:
 				}
 
 				node_info* next_fail = next->fail;
-				next->term |= next_fail->term;
+				next->term += next_fail->term;
 				q.push(next);
 			}
 		}
 	}
 
-	void insert(string& word)
+	void insert(string& pattern)
 	{
-		inner_insert(root_node, 0, word);
+		inner_insert(root_node, 0, pattern);
 	}
 
-	void inner_insert(node_info* curr, int index, string& word)
+	void inner_insert(node_info* curr, int index, string& pattern)
 	{
-		if (index == (int)word.size())
+		if (index == (int)pattern.size())
 		{
-			curr->term = true;
+			curr->term = 1;
 			return;
 		}
 
-		if (curr->child[word[index]] == nullptr)
+		if (curr->child[pattern[index]] == nullptr)
 		{
-			curr->child[word[index]] = init_node();
+			curr->child[pattern[index]] = init_node();
 		}
 
-		inner_insert(curr->child[word[index]], index + 1, word);
+		inner_insert(curr->child[pattern[index]], index + 1, pattern);
 	}
 
-	bool find(string& word)
+	int find(string& text)
 	{
-		return inner_find(root_node, word);
+		return inner_find(root_node, text);
 	}
 
-	bool inner_find(node_info* curr, string& word)
+	int inner_find(node_info* curr, string& text)
 	{
-		for (int i = 0; i < (int)word.size(); i++)
+		int ret = 0;
+		for (int i = 0; i < (int)text.size(); i++)
 		{
-			while (curr != root_node && curr->child[word[i]] == nullptr)
+			while (curr != root_node && curr->child[text[i]] == nullptr)
 			{
 				curr = curr->fail;
 			}
 
-			if (curr->child[word[i]] != nullptr)
+			if (curr->child[text[i]] != nullptr)
 			{
-				curr = curr->child[word[i]];
+				curr = curr->child[text[i]];
 			}
 
-			if (curr->term)
-			{
-				return true;
-			}
+			ret += curr->term;
 		}
-
-		return false;
+		return ret;
 	}
 };
 
 //aho_corasick ac;
-//ac.insert(str);
+//ac.insert(pattern);
 //ac.process();
-//bool is = ac.find(str);
+//int count = ac.find(text);
