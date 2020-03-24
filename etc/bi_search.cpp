@@ -33,7 +33,14 @@ public:
             }
         }
 
-        result = hi;
+        for (value_type x = lo; x <= hi; x++)
+        {
+            if (check(x))
+            {
+                result = x;
+                break;
+            }
+        }
     }
 
 public:

@@ -63,7 +63,7 @@ public:
 
                 for (int idx : cand_bs_info_inv[i])
                 {
-                    if (idx)
+                    if (check(idx))
                     {
                         bs_info_list[idx].hi = i;
                         result_list[idx] = i + 1;
@@ -82,7 +82,19 @@ public:
     {
 
     }
+
+    bool check(int idx)
+    {
+        if (idx)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 };
 
-//parallel_bi_search<long long> pbs(N, lo, hi);
+//parallel_bi_search<long long> pbs(N, lo - 1, hi + 1);
 //long long ret = pbs.result_list[i];
