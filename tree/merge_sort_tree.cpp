@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <limits>
+#include <numeric>
 #include <algorithm>
 #include <functional>
 
@@ -16,6 +17,7 @@ class merge_sort_tree
 {
 public:
 	int data_count;
+	long long merge_swap_count;
 
 	vector<value_type> data_list;
 
@@ -23,7 +25,7 @@ public:
 
 public:
 	merge_sort_tree(int _data_count)
-		: data_count(_data_count), data_list(), tree()
+		: data_count(_data_count), merge_swap_count(0), data_list(), tree()
 	{
 		data_list.assign(data_count, 0);
 
@@ -50,7 +52,25 @@ public:
 			inner_init(node * 2, start, mid);
 			inner_init(node * 2 + 1, mid + 1, end);
 
-			merge(tree[node * 2].begin(), tree[node * 2].end(), tree[node * 2 + 1].begin(), tree[node * 2 + 1].end(), back_inserter(tree[node]));
+			int left = 0;
+			int right = 0;
+			while (left < tree[node * 2].size() && right < tree[node * 2 + 1].size())
+			{
+				if (tree[node * 2][left] <= tree[node * 2 + 1][right])
+				{
+					tree[node].push_back(tree[node * 2][left]);
+					left++;
+				}
+				else
+				{
+					merge_swap_count += tree[node * 2].size() - left;
+
+					tree[node].push_back(tree[node * 2 + 1][right]);
+					right++;
+				}
+			}
+
+			merge(tree[node * 2].begin() + left, tree[node * 2].end(), tree[node * 2 + 1].begin() + right, tree[node * 2 + 1].end(), back_inserter(tree[node]));
 		}
 	}
 
@@ -78,4 +98,5 @@ public:
 //merge_sort_tree<long long> ms(N);
 //ms.data_list[i] = val;
 //ms.init();
-//int ret = ms.query(left, right, val);
+//int ret1 = ms.query(left, right, val);
+//long long ret2 = ms.merge_swap_count;
