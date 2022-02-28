@@ -15,3 +15,4 @@ namespace geometry_constant
 };
 
 //double eps_value = geometry_constant::EPS;
+//double inf_value = geometry_constant::INF;
