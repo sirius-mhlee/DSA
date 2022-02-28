@@ -115,8 +115,13 @@ namespace geometry_helper
 		}
 		else
 		{
+			int ccw_abcd = ccw_abc * ccw_abd;
 			int ccw_cdab = ccw(c, d, a) * ccw(c, d, b);
-			if (ccw_cdab < 0) return 2;
+			if (ccw_cdab < 0)
+			{
+				if (ccw_abcd == 0) return 1;
+				return 2;
+			}
 			else if (ccw_cdab == 0) return 1;
 			return 0;
 		}
@@ -155,7 +160,7 @@ namespace geometry_helper
 	}
 
 	template<typename value_type>
-	bool check_point_include(vector<point<value_type>> point_list, point<value_type> point)
+	bool check_point_include_ccw(vector<point<value_type>> point_list, point<value_type> check_point)
 	{
 		bool positive = false;
 		bool negative = false;
@@ -164,13 +169,39 @@ namespace geometry_helper
 		{
 			int j = (i + 1) % (int)point_list.size();
 
-			int ccw_result = ccw(point_list[i], point_list[j], point);
+			int ccw_result = ccw(point_list[i], point_list[j], check_point);
 			if (ccw_result >= 0) positive = true;
 			else if (ccw_result < 0) negative = true;
 
 			if (positive && negative) return false;
 		}
 		return true;
+	}
+
+	template<typename value_type>
+	bool check_point_include_raycast(vector<point<value_type>> point_list, point<value_type> check_point)
+	{
+		int check_value = 0;
+
+		for (int i = 0; i < (int)point_list.size(); i++)
+		{
+			int j = (i + 1) % (int)point_list.size();
+
+			point<value_type> point_target(check_point.x + INF, check_point.y + 1);
+
+			int intersect_count_ret = intersect_count(point_list[i], point_list[j], check_point, point_target);
+			if (intersect_count_ret == 1 || intersect_count_ret == 8)
+			{
+				return true;
+			}
+			else if (intersect_count_ret == 2)
+			{
+				check_value++;
+			}
+		}
+
+		if (check_value % 2) return true;
+		return false;
 	}
 };
 
@@ -182,4 +213,5 @@ namespace geometry_helper
 //bool intersect_ret = geometry_helper::intersect<int>(p1, p2, p3, p4);
 //long long area_ret = geometry_helper::area<long long>(point_list);
 //bool check_convex_ret = geometry_helper::check_convex<int>(point_list);
-//bool check_point_include = geometry_helper::check_point_include<int>(point_list, point);
+//bool check_point_include_ccw_ret = geometry_helper::check_point_include_ccw<int>(point_list, check_point);
+//bool check_point_include_raycast_ret = geometry_helper::check_point_include_raycast<int>(point_list, check_point);
