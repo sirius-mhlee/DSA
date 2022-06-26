@@ -15,126 +15,126 @@ template<typename value_type>
 class segment_tree_lazy
 {
 public:
-    class lazy_info
-    {
-    public:
-        bool flag;
+	class lazy_info
+	{
+	public:
+		bool flag;
 
-        value_type val;
+		value_type val;
 
-    public:
-        lazy_info(bool _flag, value_type _val)
-            : flag(_flag), val(_val)
-        {}
-    };
-
-public:
-    int data_count;
-    vector<value_type> data_list;
-
-    vector<lazy_info> lazy;
-    vector<value_type> tree;
+	public:
+		lazy_info(bool _flag, value_type _val)
+			: flag(_flag), val(_val)
+		{}
+	};
 
 public:
-    segment_tree_lazy(int _data_count)
-        : data_count(_data_count), data_list(), lazy(), tree()
-    {
-        data_list.assign(data_count, 0);
+	int data_count;
+	vector<value_type> data_list;
 
-        int height = (int)ceil(log2(data_count));
-        int tree_size = (1 << (height + 1));
-        lazy.assign(tree_size, lazy_info(false, 0));
-        tree.assign(tree_size, 0);
-    }
+	vector<lazy_info> lazy;
+	vector<value_type> tree;
 
 public:
-    void init()
-    {
-        inner_init(1, 0, data_count - 1);
-    }
+	segment_tree_lazy(int _data_count)
+		: data_count(_data_count), data_list(), lazy(), tree()
+	{
+		data_list.assign(data_count, 0);
 
-    value_type inner_init(int node, int start, int end)
-    {
-        if (start == end)
-        {
-            return tree[node] = data_list[start];
-        }
-        else
-        {
-            int mid = (start + end) / 2;
-            return tree[node] = inner_init(node * 2, start, mid) + inner_init(node * 2 + 1, mid + 1, end);
-        }
-    }
+		int height = (int)ceil(log2(data_count));
+		int tree_size = (1 << (height + 1));
+		lazy.assign(tree_size, lazy_info(false, 0));
+		tree.assign(tree_size, 0);
+	}
 
-    void propagate(int node, int start, int end)
-    {
-        if (lazy[node].flag)
-        {
-            if (start != end)
-            {
-                lazy[node * 2].flag = true;
-                lazy[node * 2].val += lazy[node].val;
+public:
+	void init()
+	{
+		inner_init(1, 0, data_count - 1);
+	}
 
-                lazy[node * 2 + 1].flag = true;
-                lazy[node * 2 + 1].val += lazy[node].val;
-            }
+	value_type inner_init(int node, int start, int end)
+	{
+		if (start == end)
+		{
+			return tree[node] = data_list[start];
+		}
+		else
+		{
+			int mid = (start + end) / 2;
+			return tree[node] = inner_init(node * 2, start, mid) + inner_init(node * 2 + 1, mid + 1, end);
+		}
+	}
 
-            tree[node] += (end - start + 1) * lazy[node].val;
-            lazy[node].flag = false;
-            lazy[node].val = 0;
-        }
-    }
+	void propagate(int node, int start, int end)
+	{
+		if (lazy[node].flag)
+		{
+			if (start != end)
+			{
+				lazy[node * 2].flag = true;
+				lazy[node * 2].val += lazy[node].val;
 
-    void update(int pos, value_type val)
-    {
-        inner_update(1, 0, data_count - 1, pos, pos, val);
-    }
+				lazy[node * 2 + 1].flag = true;
+				lazy[node * 2 + 1].val += lazy[node].val;
+			}
 
-    void update(int left, int right, value_type val)
-    {
-        inner_update(1, 0, data_count - 1, left, right, val);
-    }
+			tree[node] += (end - start + 1) * lazy[node].val;
+			lazy[node].flag = false;
+			lazy[node].val = 0;
+		}
+	}
 
-    void inner_update(int node, int start, int end, int left, int right, value_type val)
-    {
-        propagate(node, start, end);
+	void update(int pos, value_type val)
+	{
+		inner_update(1, 0, data_count - 1, pos, pos, val);
+	}
 
-        if (right < start || end < left) return;
-        if (left <= start && end <= right)
-        {
-            lazy[node].flag = true;
-            lazy[node].val += val;
-            propagate(node, start, end);
-            return;
-        }
+	void update(int left, int right, value_type val)
+	{
+		inner_update(1, 0, data_count - 1, left, right, val);
+	}
 
-        int mid = (start + end) / 2;
-        inner_update(node * 2, start, mid, left, right, val);
-        inner_update(node * 2 + 1, mid + 1, end, left, right, val);
+	void inner_update(int node, int start, int end, int left, int right, value_type val)
+	{
+		propagate(node, start, end);
 
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
-    }
+		if (right < start || end < left) return;
+		if (left <= start && end <= right)
+		{
+			lazy[node].flag = true;
+			lazy[node].val += val;
+			propagate(node, start, end);
+			return;
+		}
 
-    value_type query(int pos)
-    {
-        return inner_query(1, 0, data_count - 1, pos, pos);
-    }
+		int mid = (start + end) / 2;
+		inner_update(node * 2, start, mid, left, right, val);
+		inner_update(node * 2 + 1, mid + 1, end, left, right, val);
 
-    value_type query(int left, int right)
-    {
-        return inner_query(1, 0, data_count - 1, left, right);
-    }
+		tree[node] = tree[node * 2] + tree[node * 2 + 1];
+	}
 
-    value_type inner_query(int node, int start, int end, int left, int right)
-    {
-        propagate(node, start, end);
+	value_type query(int pos)
+	{
+		return inner_query(1, 0, data_count - 1, pos, pos);
+	}
 
-        if (right < start || end < left) return 0;
-        if (left <= start && end <= right) return tree[node];
+	value_type query(int left, int right)
+	{
+		return inner_query(1, 0, data_count - 1, left, right);
+	}
 
-        int mid = (start + end) / 2;
-        return inner_query(node * 2, start, mid, left, right) + inner_query(node * 2 + 1, mid + 1, end, left, right);
-    }
+	value_type inner_query(int node, int start, int end, int left, int right)
+	{
+		propagate(node, start, end);
+
+		if (right < start || end < left) return 0;
+		if (left <= start && end <= right) return tree[node];
+
+		int mid = (start + end) / 2;
+		return inner_query(node * 2, start, mid, left, right) + inner_query(node * 2 + 1, mid + 1, end, left, right);
+	}
 };
 
 //segment_tree_lazy<int> seg(N);

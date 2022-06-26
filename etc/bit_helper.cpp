@@ -17,7 +17,7 @@ namespace bit_helper
 		return log2(n);
 	}
 
-    template<typename value_type>
+	template<typename value_type>
 	int find_most_right_bit_pos(const value_type& n)
 	{
 		return log2(n & (-n));
