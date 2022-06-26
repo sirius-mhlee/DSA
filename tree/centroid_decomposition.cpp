@@ -14,79 +14,79 @@ using namespace std;
 class centroid_decomposition
 {
 public:
-	vector<vector<int>> adj;
-	vector<int> subtree_size;
+    vector<vector<int>> adj;
+    vector<int> subtree_size;
 
-	vector<bool> visited;
+    vector<bool> visited;
 
-	int decompose_root;
-	vector<vector<int>> decompose_adj;
-
-public:
-	centroid_decomposition(int vertex_count)
-		: adj(), subtree_size(), visited(), decompose_root(-1), decompose_adj()
-	{
-		adj.assign(vertex_count, vector<int>());
-		subtree_size.assign(vertex_count, 0);
-
-		visited.assign(vertex_count, false);
-
-		decompose_adj.assign(vertex_count, vector<int>());
-	}
+    int decompose_root;
+    vector<vector<int>> decompose_adj;
 
 public:
-	void process()
-	{
-		decompose_root = decompose(0);
-	}
+    centroid_decomposition(int vertex_count)
+        : adj(), subtree_size(), visited(), decompose_root(-1), decompose_adj()
+    {
+        adj.assign(vertex_count, vector<int>());
+        subtree_size.assign(vertex_count, 0);
 
-	void calc_size(int curr, int prev)
-	{
-		subtree_size[curr] = 1;
+        visited.assign(vertex_count, false);
 
-		for (int next : adj[curr])
-		{
-			if (visited[next] || next == prev) continue;
+        decompose_adj.assign(vertex_count, vector<int>());
+    }
 
-			calc_size(next, curr);
-			subtree_size[curr] += subtree_size[next];
-		}
-	}
+public:
+    void process()
+    {
+        decompose_root = decompose(0);
+    }
 
-	int get_centroid(int curr, int prev, int size)
-	{
-		for (int next : adj[curr])
-		{
-			if (visited[next] || next == prev) continue;
+    void calc_size(int curr, int prev)
+    {
+        subtree_size[curr] = 1;
 
-			if (subtree_size[next] > size / 2)
-			{
-				return get_centroid(next, curr, size);
-			}
-		}
+        for (int next : adj[curr])
+        {
+            if (visited[next] || next == prev) continue;
 
-		return curr;
-	}
+            calc_size(next, curr);
+            subtree_size[curr] += subtree_size[next];
+        }
+    }
 
-	int decompose(int curr)
-	{
-		calc_size(curr, -1);
-		int centroid = get_centroid(curr, -1, subtree_size[curr]);
+    int get_centroid(int curr, int prev, int size)
+    {
+        for (int next : adj[curr])
+        {
+            if (visited[next] || next == prev) continue;
 
-		visited[centroid] = true;
+            if (subtree_size[next] > size / 2)
+            {
+                return get_centroid(next, curr, size);
+            }
+        }
 
-		for (int next : adj[centroid])
-		{
-			if (visited[next]) continue;
+        return curr;
+    }
 
-			int next_centroid = decompose(next);
+    int decompose(int curr)
+    {
+        calc_size(curr, -1);
+        int centroid = get_centroid(curr, -1, subtree_size[curr]);
 
-			decompose_adj[centroid].push_back(next_centroid);
-			decompose_adj[next_centroid].push_back(centroid);
-		}
+        visited[centroid] = true;
 
-		return centroid;
-	}
+        for (int next : adj[centroid])
+        {
+            if (visited[next]) continue;
+
+            int next_centroid = decompose(next);
+
+            decompose_adj[centroid].push_back(next_centroid);
+            decompose_adj[next_centroid].push_back(centroid);
+        }
+
+        return centroid;
+    }
 };
 
 //centroid_decomposition cd(N);

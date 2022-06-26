@@ -15,63 +15,63 @@ template<typename value_type>
 class mst
 {
 public:
-	class edge_info
-	{
-	public:
-		int from;
-		int to;
+    class edge_info
+    {
+    public:
+        int from;
+        int to;
 
-		value_type cost;
+        value_type cost;
 
-	public:
-		edge_info(int _from, int _to, value_type _cost)
-			: from(_from), to(_to), cost(_cost)
-		{}
-	};
-
-public:
-	int vertex_count;
-
-	union_find uf;
-	vector<edge_info> edge_list;
-
-	value_type cost_result;
+    public:
+        edge_info(int _from, int _to, value_type _cost)
+            : from(_from), to(_to), cost(_cost)
+        {}
+    };
 
 public:
-	mst(int _vertex_count)
-		: vertex_count(_vertex_count), uf(_vertex_count), edge_list(), cost_result(0)
-	{}
+    int vertex_count;
+
+    union_find uf;
+    vector<edge_info> edge_list;
+
+    value_type cost_result;
 
 public:
-	void create_edge(int from, int to, value_type cost)
-	{
-		edge_list.push_back(edge_info(from, to, cost));
-	}
+    mst(int _vertex_count)
+        : vertex_count(_vertex_count), uf(_vertex_count), edge_list(), cost_result(0)
+    {}
 
-	void process()
-	{
-		sort(edge_list.begin(), edge_list.end(), [](const edge_info& l, const edge_info& r)
-		{
-			return l.cost < r.cost;
-		});
+public:
+    void create_edge(int from, int to, value_type cost)
+    {
+        edge_list.push_back(edge_info(from, to, cost));
+    }
 
-		int cnt = 0;
+    void process()
+    {
+        sort(edge_list.begin(), edge_list.end(), [](const edge_info& l, const edge_info& r)
+        {
+            return l.cost < r.cost;
+        });
 
-		for (edge_info edge : edge_list)
-		{
-			int from_parent = uf.find(edge.from);
-			int to_parent = uf.find(edge.to);
+        int cnt = 0;
 
-			if (from_parent == to_parent) continue;
+        for (edge_info edge : edge_list)
+        {
+            int from_parent = uf.find(edge.from);
+            int to_parent = uf.find(edge.to);
 
-			uf.merge(from_parent, to_parent);
+            if (from_parent == to_parent) continue;
 
-			cost_result += edge.cost;
-			cnt++;
+            uf.merge(from_parent, to_parent);
 
-			if (cnt == vertex_count - 1) break;
-		}
-	}
+            cost_result += edge.cost;
+            cnt++;
+
+            if (cnt == vertex_count - 1) break;
+        }
+    }
 };
 
 //mst<int> m(N);

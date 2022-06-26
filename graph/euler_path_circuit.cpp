@@ -14,132 +14,132 @@ using namespace std;
 class euler_path_circuit
 {
 public:
-	bool directed;
+    bool directed;
 
-	vector<vector<pair<int, int>>> adj;
-	int edge_count;
-	vector<bool> visited;
+    vector<vector<pair<int, int>>> adj;
+    int edge_count;
+    vector<bool> visited;
 
-	vector<int> out_degree;
-	vector<int> in_degree;
+    vector<int> out_degree;
+    vector<int> in_degree;
 
-	vector<int> result;
-
-public:
-	euler_path_circuit(bool _directed, int vertex_count)
-		: directed(_directed), adj(), edge_count(0), visited(), out_degree(), in_degree(), result()
-	{
-		adj.assign(vertex_count, vector<pair<int, int>>());
-
-		out_degree.assign(vertex_count, 0);
-		in_degree.assign(vertex_count, 0);
-	}
+    vector<int> result;
 
 public:
-	void create_edge(int from, int to)
-	{
-		adj[from].push_back(make_pair(to, edge_count));
+    euler_path_circuit(bool _directed, int vertex_count)
+        : directed(_directed), adj(), edge_count(0), visited(), out_degree(), in_degree(), result()
+    {
+        adj.assign(vertex_count, vector<pair<int, int>>());
 
-		out_degree[from]++;
-		in_degree[to]++;
-	}
+        out_degree.assign(vertex_count, 0);
+        in_degree.assign(vertex_count, 0);
+    }
 
-	bool euler_path()
-	{
-		int check_count = 0;
-		int start = -1;
-		int end = -1;
+public:
+    void create_edge(int from, int to)
+    {
+        adj[from].push_back(make_pair(to, edge_count));
 
-		for (int i = 0; i < static_cast<int>(adj.size()); i++)
-		{
-			if (!directed)
-			{
-				if (out_degree[i] % 2 != 0)
-				{
-					if (check_count < 2)
-					{
-						check_count++;
-						if (check_count == 1) start = i;
-						else if (check_count == 2) end = i;
-					}
-					else
-					{
-						return false;
-					}
-				}
-			}
-			else
-			{
-				if (out_degree[i] != in_degree[i])
-				{
-					if (check_count < 2)
-					{
-						check_count++;
-						if (out_degree[i] == in_degree[i] + 1) start = i;
-						else if (out_degree[i] + 1 == in_degree[i]) end = i;
-					}
-					else
-					{
-						return false;
-					}
-				}
-			}
-		}
+        out_degree[from]++;
+        in_degree[to]++;
+    }
 
-		if (start != -1 && end != -1)
-		{
-			visited.assign(edge_count, false);
-			inner_euler_circuit(start);
-			reverse(result.begin(), result.end());
-		}
+    bool euler_path()
+    {
+        int check_count = 0;
+        int start = -1;
+        int end = -1;
 
-		return true;
-	}
+        for (int i = 0; i < static_cast<int>(adj.size()); i++)
+        {
+            if (!directed)
+            {
+                if (out_degree[i] % 2 != 0)
+                {
+                    if (check_count < 2)
+                    {
+                        check_count++;
+                        if (check_count == 1) start = i;
+                        else if (check_count == 2) end = i;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (out_degree[i] != in_degree[i])
+                {
+                    if (check_count < 2)
+                    {
+                        check_count++;
+                        if (out_degree[i] == in_degree[i] + 1) start = i;
+                        else if (out_degree[i] + 1 == in_degree[i]) end = i;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
 
-	bool euler_circuit()
-	{
-		for (int i = 0; i < static_cast<int>(adj.size()); i++)
-		{
-			if (!directed)
-			{
-				if (out_degree[i] % 2 != 0)
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (out_degree[i] != in_degree[i])
-				{
-					return false;
-				}
-			}
-		}
+        if (start != -1 && end != -1)
+        {
+            visited.assign(edge_count, false);
+            inner_euler_circuit(start);
+            reverse(result.begin(), result.end());
+        }
 
-		visited.assign(edge_count, false);
-		inner_euler_circuit(0);
-		reverse(result.begin(), result.end());
+        return true;
+    }
 
-		return true;
-	}
+    bool euler_circuit()
+    {
+        for (int i = 0; i < static_cast<int>(adj.size()); i++)
+        {
+            if (!directed)
+            {
+                if (out_degree[i] % 2 != 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (out_degree[i] != in_degree[i])
+                {
+                    return false;
+                }
+            }
+        }
 
-	void inner_euler_circuit(int curr)
-	{
-		while (adj[curr].size() > 0)
-		{
-			int next = adj[curr].back().first;
-			int edge_id = adj[curr].back().second;
-			adj[curr].pop_back();
+        visited.assign(edge_count, false);
+        inner_euler_circuit(0);
+        reverse(result.begin(), result.end());
 
-			if (!visited[edge_id])
-			{
-				visited[edge_id] = true;
-				inner_euler_circuit(next);
-			}
-		}
+        return true;
+    }
 
-		result.push_back(curr);
-	}
+    void inner_euler_circuit(int curr)
+    {
+        while (adj[curr].size() > 0)
+        {
+            int next = adj[curr].back().first;
+            int edge_id = adj[curr].back().second;
+            adj[curr].pop_back();
+
+            if (!visited[edge_id])
+            {
+                visited[edge_id] = true;
+                inner_euler_circuit(next);
+            }
+        }
+
+        result.push_back(curr);
+    }
 };
 
 //euler_path_circuit epc(directed, N);

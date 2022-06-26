@@ -15,92 +15,92 @@ using namespace std;
 class hopcroft_karp
 {
 public:
-	vector<vector<int>> adj;
-	vector<int> level;
+    vector<vector<int>> adj;
+    vector<int> level;
 
-	vector<bool> visited;
-	vector<int> match;
+    vector<bool> visited;
+    vector<int> match;
 
-	int match_count;
-
-public:
-	hopcroft_karp(int left_vertex_count, int right_vertex_count)
-		: adj(), level(), visited(), match(), match_count(0)
-	{
-		adj.assign(left_vertex_count, vector<int>());
-		level.assign(left_vertex_count, -1);
-		visited.assign(left_vertex_count, false);
-
-		match.assign(right_vertex_count, -1);
-	}
+    int match_count;
 
 public:
-	void process()
-	{
-		while (true)
-		{
-			hopcroft_karp_bfs();
+    hopcroft_karp(int left_vertex_count, int right_vertex_count)
+        : adj(), level(), visited(), match(), match_count(0)
+    {
+        adj.assign(left_vertex_count, vector<int>());
+        level.assign(left_vertex_count, -1);
+        visited.assign(left_vertex_count, false);
 
-			int count = 0;
-			for (int i = 0; i < (int)adj.size(); i++)
-			{
-				if (!visited[i] && hopcroft_karp_dfs(i))
-				{
-					count++;
-				}
-			}
+        match.assign(right_vertex_count, -1);
+    }
 
-			if (count == 0) break;
+public:
+    void process()
+    {
+        while (true)
+        {
+            hopcroft_karp_bfs();
 
-			match_count += count;
-		}
-	}
+            int count = 0;
+            for (int i = 0; i < (int)adj.size(); i++)
+            {
+                if (!visited[i] && hopcroft_karp_dfs(i))
+                {
+                    count++;
+                }
+            }
 
-	void hopcroft_karp_bfs()
-	{
-		fill(level.begin(), level.end(), -1);
+            if (count == 0) break;
 
-		queue<int> q;
-		for (int i = 0; i < (int)adj.size(); i++)
-		{
-			if (!visited[i])
-			{
-				level[i] = 0;
-				q.push(i);
-			}
-		}
+            match_count += count;
+        }
+    }
 
-		while (!q.empty())
-		{
-			int curr = q.front();
-			q.pop();
+    void hopcroft_karp_bfs()
+    {
+        fill(level.begin(), level.end(), -1);
 
-			for (int next : adj[curr])
-			{
-				if (match[next] != -1 && level[match[next]] == -1)
-				{
-					level[match[next]] = level[curr] + 1;
-					q.push(match[next]);
-				}
-			}
-		}
-	}
+        queue<int> q;
+        for (int i = 0; i < (int)adj.size(); i++)
+        {
+            if (!visited[i])
+            {
+                level[i] = 0;
+                q.push(i);
+            }
+        }
 
-	bool hopcroft_karp_dfs(int curr)
-	{
-		for (int next : adj[curr])
-		{
-			if (match[next] == -1 || (level[match[next]] == level[curr] + 1 && hopcroft_karp_dfs(match[next])))
-			{
-				visited[curr] = true;
-				match[next] = curr;
+        while (!q.empty())
+        {
+            int curr = q.front();
+            q.pop();
 
-				return true;
-			}
-		}
+            for (int next : adj[curr])
+            {
+                if (match[next] != -1 && level[match[next]] == -1)
+                {
+                    level[match[next]] = level[curr] + 1;
+                    q.push(match[next]);
+                }
+            }
+        }
+    }
 
-		return false;
-	}
+    bool hopcroft_karp_dfs(int curr)
+    {
+        for (int next : adj[curr])
+        {
+            if (match[next] == -1 || (level[match[next]] == level[curr] + 1 && hopcroft_karp_dfs(match[next])))
+            {
+                visited[curr] = true;
+                match[next] = curr;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 };
 
 //hopcroft_karp hk(N, M);

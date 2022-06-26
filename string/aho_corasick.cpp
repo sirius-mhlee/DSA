@@ -15,133 +15,133 @@ using namespace std;
 class aho_corasick
 {
 public:
-	class node_info
-	{
-	public:
-		int term;
+    class node_info
+    {
+    public:
+        int term;
 
-		map<char, node_info*> child;
-		node_info* fail;
+        map<char, node_info*> child;
+        node_info* fail;
 
-	public:
-		node_info()
-			: term(0), child(), fail(nullptr)
-		{}
-	};
-
-public:
-	node_info* root_node;
-	vector<node_info*> node_list;
+    public:
+        node_info()
+            : term(0), child(), fail(nullptr)
+        {}
+    };
 
 public:
-	aho_corasick()
-		: root_node(nullptr), node_list()
-	{
-		root_node = init_node();
-	}
-
-	~aho_corasick()
-	{
-		for (node_info* node : node_list)
-		{
-			delete node;
-		}
-	}
+    node_info* root_node;
+    vector<node_info*> node_list;
 
 public:
-	node_info* init_node()
-	{
-		node_list.push_back(new node_info());
-		return node_list.back();
-	}
+    aho_corasick()
+        : root_node(nullptr), node_list()
+    {
+        root_node = init_node();
+    }
 
-	void process()
-	{
-		root_node->fail = root_node;
+    ~aho_corasick()
+    {
+        for (node_info* node : node_list)
+        {
+            delete node;
+        }
+    }
 
-		queue<node_info*> q;
-		q.push(root_node);
-		while (!q.empty())
-		{
-			node_info* curr = q.front();
-			q.pop();
+public:
+    node_info* init_node()
+    {
+        node_list.push_back(new node_info());
+        return node_list.back();
+    }
 
-			for (pair<char, node_info*> node : curr->child)
-			{
-				char ch = node.first;
-				node_info* next = node.second;
+    void process()
+    {
+        root_node->fail = root_node;
 
-				if (curr == root_node)
-				{
-					next->fail = root_node;
-				}
-				else
-				{
-					node_info* curr_fail = curr->fail;
-					while (curr_fail != root_node && curr_fail->child[ch] == nullptr)
-					{
-						curr_fail = curr_fail->fail;
-					}
+        queue<node_info*> q;
+        q.push(root_node);
+        while (!q.empty())
+        {
+            node_info* curr = q.front();
+            q.pop();
 
-					if (curr_fail->child[ch] != nullptr)
-					{
-						curr_fail = curr_fail->child[ch];
-					}
-					next->fail = curr_fail;
-				}
+            for (pair<char, node_info*> node : curr->child)
+            {
+                char ch = node.first;
+                node_info* next = node.second;
 
-				node_info* next_fail = next->fail;
-				next->term += next_fail->term;
-				q.push(next);
-			}
-		}
-	}
+                if (curr == root_node)
+                {
+                    next->fail = root_node;
+                }
+                else
+                {
+                    node_info* curr_fail = curr->fail;
+                    while (curr_fail != root_node && curr_fail->child[ch] == nullptr)
+                    {
+                        curr_fail = curr_fail->fail;
+                    }
 
-	void insert(string& pattern)
-	{
-		inner_insert(root_node, 0, pattern);
-	}
+                    if (curr_fail->child[ch] != nullptr)
+                    {
+                        curr_fail = curr_fail->child[ch];
+                    }
+                    next->fail = curr_fail;
+                }
 
-	void inner_insert(node_info* curr, int index, string& pattern)
-	{
-		if (index == (int)pattern.size())
-		{
-			curr->term = 1;
-			return;
-		}
+                node_info* next_fail = next->fail;
+                next->term += next_fail->term;
+                q.push(next);
+            }
+        }
+    }
 
-		if (curr->child[pattern[index]] == nullptr)
-		{
-			curr->child[pattern[index]] = init_node();
-		}
+    void insert(string& pattern)
+    {
+        inner_insert(root_node, 0, pattern);
+    }
 
-		inner_insert(curr->child[pattern[index]], index + 1, pattern);
-	}
+    void inner_insert(node_info* curr, int index, string& pattern)
+    {
+        if (index == (int)pattern.size())
+        {
+            curr->term = 1;
+            return;
+        }
 
-	int find(string& text)
-	{
-		return inner_find(root_node, text);
-	}
+        if (curr->child[pattern[index]] == nullptr)
+        {
+            curr->child[pattern[index]] = init_node();
+        }
 
-	int inner_find(node_info* curr, string& text)
-	{
-		int ret = 0;
-		for (int i = 0; i < (int)text.size(); i++)
-		{
-			while (curr != root_node && curr->child[text[i]] == nullptr)
-			{
-				curr = curr->fail;
-			}
+        inner_insert(curr->child[pattern[index]], index + 1, pattern);
+    }
 
-			if (curr->child[text[i]] != nullptr)
-			{
-				curr = curr->child[text[i]];
-			}
+    int find(string& text)
+    {
+        return inner_find(root_node, text);
+    }
 
-			ret += curr->term;
-		}
-		return ret;
-	}
+    int inner_find(node_info* curr, string& text)
+    {
+        int ret = 0;
+        for (int i = 0; i < (int)text.size(); i++)
+        {
+            while (curr != root_node && curr->child[text[i]] == nullptr)
+            {
+                curr = curr->fail;
+            }
+
+            if (curr->child[text[i]] != nullptr)
+            {
+                curr = curr->child[text[i]];
+            }
+
+            ret += curr->term;
+        }
+        return ret;
+    }
 };
 
 //aho_corasick ac;

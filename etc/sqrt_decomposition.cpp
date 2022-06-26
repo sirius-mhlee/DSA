@@ -15,62 +15,62 @@ template<typename value_type>
 class sqrt_decomposition
 {
 public:
-	vector<value_type> data_list;
+    vector<value_type> data_list;
 
-	int bucket_unit_size;
-	vector<value_type> bucket;
-
-public:
-	sqrt_decomposition(int data_count)
-		: data_list(), bucket_unit_size(0), bucket()
-	{
-		data_list.assign(data_count, 0);
-
-		bucket_unit_size = sqrt(data_count);
-		bucket.assign((data_count / bucket_unit_size) + 1, 0);
-	}
+    int bucket_unit_size;
+    vector<value_type> bucket;
 
 public:
-	void init()
-	{
-		for (int i = 0; i < (int)data_list.size(); i++)
-		{
-			bucket[i / bucket_unit_size] += data_list[i];
-		}
-	}
+    sqrt_decomposition(int data_count)
+        : data_list(), bucket_unit_size(0), bucket()
+    {
+        data_list.assign(data_count, 0);
 
-	void update(int pos, value_type val)
-	{
-		value_type diff = val - data_list[pos];
+        bucket_unit_size = sqrt(data_count);
+        bucket.assign((data_count / bucket_unit_size) + 1, 0);
+    }
 
-		data_list[pos] = val;
-		bucket[pos / bucket_unit_size] += diff;
-	}
+public:
+    void init()
+    {
+        for (int i = 0; i < (int)data_list.size(); i++)
+        {
+            bucket[i / bucket_unit_size] += data_list[i];
+        }
+    }
 
-	value_type query(int left, int right)
-	{
-		value_type ret = 0;
+    void update(int pos, value_type val)
+    {
+        value_type diff = val - data_list[pos];
 
-		while ((left % bucket_unit_size) != 0 && left <= right)
-		{
-			ret += data_list[left];
-			left++;
-		}
+        data_list[pos] = val;
+        bucket[pos / bucket_unit_size] += diff;
+    }
 
-		while (((right + 1) % bucket_unit_size) != 0 && left <= right)
-		{
-			ret += data_list[right];
-			right--;
-		}
+    value_type query(int left, int right)
+    {
+        value_type ret = 0;
 
-		while (left <= right)
-		{
-			ret += bucket[left / bucket_unit_size];
-			left += bucket_unit_size;
-		}
+        while ((left % bucket_unit_size) != 0 && left <= right)
+        {
+            ret += data_list[left];
+            left++;
+        }
 
-		return ret;
-	}
+        while (((right + 1) % bucket_unit_size) != 0 && left <= right)
+        {
+            ret += data_list[right];
+            right--;
+        }
+
+        while (left <= right)
+        {
+            ret += bucket[left / bucket_unit_size];
+            left += bucket_unit_size;
+        }
+
+        return ret;
+    }
 };
 
 //sqrt_decomposition<int> sd(N);

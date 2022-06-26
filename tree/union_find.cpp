@@ -14,48 +14,48 @@ using namespace std;
 class union_find
 {
 public:
-	vector<int> parent;
-	vector<int> count;
-	vector<int> rank;
+    vector<int> parent;
+    vector<int> count;
+    vector<int> rank;
 
 public:
-	union_find(int vertex_count)
-		: parent(), count(), rank()
-	{
-		parent.assign(vertex_count, 0);
-		count.assign(vertex_count, 1);
-		rank.assign(vertex_count, 1);
+    union_find(int vertex_count)
+        : parent(), count(), rank()
+    {
+        parent.assign(vertex_count, 0);
+        count.assign(vertex_count, 1);
+        rank.assign(vertex_count, 1);
 
-		for (int i = 0; i < vertex_count; i++)
-		{
-			parent[i] = i;
-		}
-	}
+        for (int i = 0; i < vertex_count; i++)
+        {
+            parent[i] = i;
+        }
+    }
 
 public:
-	int find(int u)
-	{
-		if (parent[u] == u) return u;
-		return parent[u] = find(parent[u]);
-	}
+    int find(int u)
+    {
+        if (parent[u] == u) return u;
+        return parent[u] = find(parent[u]);
+    }
 
-	void merge(int u, int v)
-	{
-		u = find(u);
-		v = find(v);
+    void merge(int u, int v)
+    {
+        u = find(u);
+        v = find(v);
 
-		if (u == v) return;
-		if (rank[u] < rank[v]) swap(u, v);
+        if (u == v) return;
+        if (rank[u] < rank[v]) swap(u, v);
 
-		parent[v] = u;
-		count[u] += count[v];
-		if (rank[u] == rank[v]) rank[u]++;
-	}
+        parent[v] = u;
+        count[u] += count[v];
+        if (rank[u] == rank[v]) rank[u]++;
+    }
 
-	int size(int u)
-	{
-		return count[find(u)];
-	}
+    int size(int u)
+    {
+        return count[find(u)];
+    }
 };
 
 //union_find uf(N);

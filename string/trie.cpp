@@ -14,87 +14,87 @@ using namespace std;
 class trie
 {
 public:
-	class node_info
-	{
-	public:
-		bool term;
+    class node_info
+    {
+    public:
+        bool term;
 
-		map<char, node_info*> child;
+        map<char, node_info*> child;
 
-	public:
-		node_info()
-			: term(false), child()
-		{}
-	};
-
-public:
-	node_info* root_node;
-	vector<node_info*> node_list;
+    public:
+        node_info()
+            : term(false), child()
+        {}
+    };
 
 public:
-	trie()
-		: root_node(nullptr), node_list()
-	{
-		root_node = init_node();
-	}
-
-	~trie()
-	{
-		for (node_info* node : node_list)
-		{
-			delete node;
-		}
-	}
+    node_info* root_node;
+    vector<node_info*> node_list;
 
 public:
-	node_info* init_node()
-	{
-		node_list.push_back(new node_info());
-		return node_list.back();
-	}
+    trie()
+        : root_node(nullptr), node_list()
+    {
+        root_node = init_node();
+    }
 
-	void insert(string& word)
-	{
-		inner_insert(root_node, 0, word);
-	}
+    ~trie()
+    {
+        for (node_info* node : node_list)
+        {
+            delete node;
+        }
+    }
 
-	void inner_insert(node_info* curr, int index, string& word)
-	{
-		if (index == (int)word.size())
-		{
-			curr->term = true;
-			return;
-		}
+public:
+    node_info* init_node()
+    {
+        node_list.push_back(new node_info());
+        return node_list.back();
+    }
 
-		if (curr->child[word[index]] == nullptr)
-		{
-			curr->child[word[index]] = init_node();
-		}
+    void insert(string& word)
+    {
+        inner_insert(root_node, 0, word);
+    }
 
-		inner_insert(curr->child[word[index]], index + 1, word);
-	}
+    void inner_insert(node_info* curr, int index, string& word)
+    {
+        if (index == (int)word.size())
+        {
+            curr->term = true;
+            return;
+        }
 
-	bool find(string& word)
-	{
-		return inner_find(root_node, 0, word);
-	}
+        if (curr->child[word[index]] == nullptr)
+        {
+            curr->child[word[index]] = init_node();
+        }
 
-	bool inner_find(node_info* curr, int index, string& word)
-	{
-		if (index == (int)word.size())
-		{
-			if (curr->term) return true;
+        inner_insert(curr->child[word[index]], index + 1, word);
+    }
 
-			return false;
-		}
+    bool find(string& word)
+    {
+        return inner_find(root_node, 0, word);
+    }
 
-		if (curr->child[word[index]] == nullptr)
-		{
-			return false;
-		}
+    bool inner_find(node_info* curr, int index, string& word)
+    {
+        if (index == (int)word.size())
+        {
+            if (curr->term) return true;
 
-		return inner_find(curr->child[word[index]], index + 1, word);
-	}
+            return false;
+        }
+
+        if (curr->child[word[index]] == nullptr)
+        {
+            return false;
+        }
+
+        return inner_find(curr->child[word[index]], index + 1, word);
+    }
 };
 
 //trie t;

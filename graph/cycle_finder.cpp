@@ -15,68 +15,68 @@ using namespace std;
 class cycle_finder
 {
 public:
-	vector<vector<int>> adj;
-	vector<int> visit_state;
-	vector<int> parent;
+    vector<vector<int>> adj;
+    vector<int> visit_state;
+    vector<int> parent;
 
-	int cycle_start;
-	int cycle_end;
+    int cycle_start;
+    int cycle_end;
 
-	vector<vector<int>> cycle_list;
-
-public:
-	cycle_finder(int vertex_count)
-		: adj(), visit_state(), parent(), cycle_start(-1), cycle_end(-1), cycle_list()
-	{
-		adj.assign(vertex_count, vector<int>());
-		visit_state.assign(vertex_count, 0);
-		parent.assign(vertex_count, -1);
-	}
+    vector<vector<int>> cycle_list;
 
 public:
-	void process()
-	{
-		for (int i = 0; i < (int)visit_state.size(); i++)
-		{
-			if (visit_state[i] == 0 && inner_process(i))
-			{
-				vector<int> cycle;
-				for (int curr = cycle_end; curr != cycle_start; curr = parent[curr])
-				{
-					visit_state[curr] = 2;
-					cycle.push_back(curr);
-				}
-				visit_state[cycle_start] = 2;
-				cycle.push_back(cycle_start);
+    cycle_finder(int vertex_count)
+        : adj(), visit_state(), parent(), cycle_start(-1), cycle_end(-1), cycle_list()
+    {
+        adj.assign(vertex_count, vector<int>());
+        visit_state.assign(vertex_count, 0);
+        parent.assign(vertex_count, -1);
+    }
 
-				reverse(cycle.begin(), cycle.end());
+public:
+    void process()
+    {
+        for (int i = 0; i < (int)visit_state.size(); i++)
+        {
+            if (visit_state[i] == 0 && inner_process(i))
+            {
+                vector<int> cycle;
+                for (int curr = cycle_end; curr != cycle_start; curr = parent[curr])
+                {
+                    visit_state[curr] = 2;
+                    cycle.push_back(curr);
+                }
+                visit_state[cycle_start] = 2;
+                cycle.push_back(cycle_start);
 
-				cycle_list.push_back(cycle);
-			}
-		}
-	}
+                reverse(cycle.begin(), cycle.end());
 
-	bool inner_process(int curr)
-	{
-		visit_state[curr] = 1;
-		for (int next : adj[curr])
-		{
-			if (visit_state[next] == 0)
-			{
-				parent[next] = curr;
-				if (inner_process(next))
-					return true;
-			}
-			else if (visit_state[next] == 1)
-			{
-				cycle_end = curr;
-				cycle_start = next;
-				return true;
-			}
-		}
-		visit_state[curr] = 2;
-		return false;
-	}
+                cycle_list.push_back(cycle);
+            }
+        }
+    }
+
+    bool inner_process(int curr)
+    {
+        visit_state[curr] = 1;
+        for (int next : adj[curr])
+        {
+            if (visit_state[next] == 0)
+            {
+                parent[next] = curr;
+                if (inner_process(next))
+                    return true;
+            }
+            else if (visit_state[next] == 1)
+            {
+                cycle_end = curr;
+                cycle_start = next;
+                return true;
+            }
+        }
+        visit_state[curr] = 2;
+        return false;
+    }
 };
 
 //cycle_finder cf(N);

@@ -14,92 +14,92 @@ using namespace std;
 class lca
 {
 public:
-	int logN;
+    int logN;
 
-	vector<vector<int>> adj;
-	vector<vector<int>> parent;
-	vector<int> depth;
-
-public:
-	lca(int vertex_count)
-		: logN(0), adj(), parent(), depth()
-	{
-		logN = log2(vertex_count) + 1;
-
-		adj.assign(vertex_count, vector<int>());
-		parent.assign(vertex_count, vector<int>(logN, -1));
-		depth.assign(vertex_count, -1);
-	}
+    vector<vector<int>> adj;
+    vector<vector<int>> parent;
+    vector<int> depth;
 
 public:
-	void process(int root)
-	{
-		depth[root] = 0;
-		make_dfs_tree(root);
-		update_parent();
-	}
+    lca(int vertex_count)
+        : logN(0), adj(), parent(), depth()
+    {
+        logN = log2(vertex_count) + 1;
 
-	void make_dfs_tree(int curr)
-	{
-		for (int next : adj[curr])
-		{
-			if (depth[next] != -1) continue;
+        adj.assign(vertex_count, vector<int>());
+        parent.assign(vertex_count, vector<int>(logN, -1));
+        depth.assign(vertex_count, -1);
+    }
 
-			parent[next][0] = curr;
-			depth[next] = depth[curr] + 1;
+public:
+    void process(int root)
+    {
+        depth[root] = 0;
+        make_dfs_tree(root);
+        update_parent();
+    }
 
-			make_dfs_tree(next);
-		}
-	}
+    void make_dfs_tree(int curr)
+    {
+        for (int next : adj[curr])
+        {
+            if (depth[next] != -1) continue;
 
-	void update_parent()
-	{
-		for (int j = 0; j < logN - 1; j++)
-		{
-			for (int i = 0; i < (int)parent.size(); i++)
-			{
-				if (parent[i][j] != -1)
-				{
-					parent[i][j + 1] = parent[parent[i][j]][j];
-				}
-			}
-		}
-	}
+            parent[next][0] = curr;
+            depth[next] = depth[curr] + 1;
 
-	int get_lca(int u, int v)
-	{
-		if (depth[u] < depth[v]) swap(u, v);
+            make_dfs_tree(next);
+        }
+    }
 
-		for (int i = logN - 1; i >= 0; i--)
-		{
-			if (parent[u][i] != -1)
-			{
-				if (depth[u] - depth[v] >= (1 << i))
-				{
-					u = parent[u][i];
-				}
-			}
-		}
+    void update_parent()
+    {
+        for (int j = 0; j < logN - 1; j++)
+        {
+            for (int i = 0; i < (int)parent.size(); i++)
+            {
+                if (parent[i][j] != -1)
+                {
+                    parent[i][j + 1] = parent[parent[i][j]][j];
+                }
+            }
+        }
+    }
 
-		if (u != v)
-		{
-			for (int i = logN - 1; i >= 0; i--)
-			{
-				if (parent[u][i] != -1 && parent[v][i] != -1)
-				{
-					if (parent[u][i] != parent[v][i])
-					{
-						u = parent[u][i];
-						v = parent[v][i];
-					}
-				}
-			}
+    int get_lca(int u, int v)
+    {
+        if (depth[u] < depth[v]) swap(u, v);
 
-			u = parent[u][0];
-		}
+        for (int i = logN - 1; i >= 0; i--)
+        {
+            if (parent[u][i] != -1)
+            {
+                if (depth[u] - depth[v] >= (1 << i))
+                {
+                    u = parent[u][i];
+                }
+            }
+        }
 
-		return u;
-	}
+        if (u != v)
+        {
+            for (int i = logN - 1; i >= 0; i--)
+            {
+                if (parent[u][i] != -1 && parent[v][i] != -1)
+                {
+                    if (parent[u][i] != parent[v][i])
+                    {
+                        u = parent[u][i];
+                        v = parent[v][i];
+                    }
+                }
+            }
+
+            u = parent[u][0];
+        }
+
+        return u;
+    }
 };
 
 //lca l(N);

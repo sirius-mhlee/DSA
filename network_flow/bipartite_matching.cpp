@@ -14,50 +14,50 @@ using namespace std;
 class bipartite_matching
 {
 public:
-	vector<vector<int>> adj;
+    vector<vector<int>> adj;
 
-	vector<bool> visited;
-	vector<int> match;
+    vector<bool> visited;
+    vector<int> match;
 
-	int match_count;
-
-public:
-	bipartite_matching(int left_vertex_count, int right_vertex_count)
-		: adj(), visited(), match(), match_count(0)
-	{
-		adj.assign(left_vertex_count, vector<int>());
-
-		visited.assign(right_vertex_count, false);
-		match.assign(right_vertex_count, -1);
-	}
+    int match_count;
 
 public:
-	void process()
-	{
-		for (int i = 0; i < (int)adj.size(); i++)
-		{
-			fill(visited.begin(), visited.end(), false);
+    bipartite_matching(int left_vertex_count, int right_vertex_count)
+        : adj(), visited(), match(), match_count(0)
+    {
+        adj.assign(left_vertex_count, vector<int>());
 
-			if (dfs(i)) match_count++;
-		}
-	}
+        visited.assign(right_vertex_count, false);
+        match.assign(right_vertex_count, -1);
+    }
 
-	bool dfs(int here)
-	{
-		for (int there : adj[here])
-		{
-			if (visited[there]) continue;
+public:
+    void process()
+    {
+        for (int i = 0; i < (int)adj.size(); i++)
+        {
+            fill(visited.begin(), visited.end(), false);
 
-			visited[there] = true;
-			if (match[there] == -1 || dfs(match[there]))
-			{
-				match[there] = here;
-				return true;
-			}
-		}
+            if (dfs(i)) match_count++;
+        }
+    }
 
-		return false;
-	}
+    bool dfs(int here)
+    {
+        for (int there : adj[here])
+        {
+            if (visited[there]) continue;
+
+            visited[there] = true;
+            if (match[there] == -1 || dfs(match[there]))
+            {
+                match[there] = here;
+                return true;
+            }
+        }
+
+        return false;
+    }
 };
 
 //bipartite_matching bm(N, M);

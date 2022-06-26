@@ -16,67 +16,67 @@ template<typename value_type>
 class dijkstra
 {
 public:
-	const value_type INF = 1e9;
+    const value_type INF = 1e9;
 
 public:
-	class edge_info
-	{
-	public:
-		int to;
+    class edge_info
+    {
+    public:
+        int to;
 
-		value_type cost;
+        value_type cost;
 
-	public:
-		edge_info(int _to, value_type _cost)
-			: to(_to), cost(_cost)
-		{}
-	};
-
-public:
-	vector<vector<edge_info>> adj;
-	vector<value_type> dist;
+    public:
+        edge_info(int _to, value_type _cost)
+            : to(_to), cost(_cost)
+        {}
+    };
 
 public:
-	dijkstra(int vertex_count)
-		: adj(), dist()
-	{
-		adj.assign(vertex_count, vector<edge_info>());
-		dist.assign(vertex_count, INF);
-	}
+    vector<vector<edge_info>> adj;
+    vector<value_type> dist;
 
 public:
-	void create_edge(int from, int to, value_type cost)
-	{
-		adj[from].push_back(edge_info(to, cost));
-	}
+    dijkstra(int vertex_count)
+        : adj(), dist()
+    {
+        adj.assign(vertex_count, vector<edge_info>());
+        dist.assign(vertex_count, INF);
+    }
 
-	void process(int start, int end)
-	{
-		priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
-		dist[start] = 0;
-		pq.push(make_pair(0, start));
+public:
+    void create_edge(int from, int to, value_type cost)
+    {
+        adj[from].push_back(edge_info(to, cost));
+    }
 
-		while (!pq.empty())
-		{
-			value_type curr_dist = pq.top().first;
-			int curr_node = pq.top().second;
-			pq.pop();
+    void process(int start, int end)
+    {
+        priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
+        dist[start] = 0;
+        pq.push(make_pair(0, start));
 
-			if (curr_dist > dist[curr_node]) continue;
+        while (!pq.empty())
+        {
+            value_type curr_dist = pq.top().first;
+            int curr_node = pq.top().second;
+            pq.pop();
 
-			for (edge_info next : adj[curr_node])
-			{
-				int next_dist = curr_dist + next.cost;
-				int next_node = next.to;
+            if (curr_dist > dist[curr_node]) continue;
 
-				if (next_dist < dist[next_node])
-				{
-					dist[next_node] = next_dist;
-					pq.push(make_pair(next_dist, next_node));
-				}
-			}
-		}
-	}
+            for (edge_info next : adj[curr_node])
+            {
+                int next_dist = curr_dist + next.cost;
+                int next_node = next.to;
+
+                if (next_dist < dist[next_node])
+                {
+                    dist[next_node] = next_dist;
+                    pq.push(make_pair(next_dist, next_node));
+                }
+            }
+        }
+    }
 };
 
 //dijkstra<int> ds(N);

@@ -13,59 +13,59 @@ using namespace std;
 
 namespace string_helper
 {
-	bool check_palindrome(const string& word)
-	{
-		if (word.empty()) return true;
+    bool check_palindrome(const string& word)
+    {
+        if (word.empty()) return true;
 
-		size_t lo = 0;
-		size_t hi = word.size() - 1;
+        size_t lo = 0;
+        size_t hi = word.size() - 1;
 
-		while (lo < hi)
-		{
-			if (word[lo] != word[hi]) return false;
+        while (lo < hi)
+        {
+            if (word[lo] != word[hi]) return false;
 
-			lo++;
-			hi--;
-		}
+            lo++;
+            hi--;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	bool starts_with(const string& s1, const string& s2)
-	{
-		if (s1.size() >= s2.size() && s1.compare(0, s2.size(), s2) == 0)
-		{
-			return true;
-		}
+    bool starts_with(const string& s1, const string& s2)
+    {
+        if (s1.size() >= s2.size() && s1.compare(0, s2.size(), s2) == 0)
+        {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	template<typename value_type>
-	tuple<int, int> find_cycle(const vector<value_type>& sequence, int start, int limit)
-	{
-		while (start + 1 < limit)
-		{
-			for (int cycle_size = 1; cycle_size + start < limit; cycle_size++)
-			{
-				bool check = true;
-				for (int i = start; i + cycle_size < limit; i++)
-				{
-					if (sequence[i] != sequence[i + cycle_size])
-					{
-						check = false;
-						break;
-					}
-				}
+    template<typename value_type>
+    tuple<int, int> find_cycle(const vector<value_type>& sequence, int start, int limit)
+    {
+        while (start + 1 < limit)
+        {
+            for (int cycle_size = 1; cycle_size + start < limit; cycle_size++)
+            {
+                bool check = true;
+                for (int i = start; i + cycle_size < limit; i++)
+                {
+                    if (sequence[i] != sequence[i + cycle_size])
+                    {
+                        check = false;
+                        break;
+                    }
+                }
 
-				if (check) return make_tuple(start, cycle_size);
-			}
+                if (check) return make_tuple(start, cycle_size);
+            }
 
-			start++;
-		}
+            start++;
+        }
 
-		return make_tuple(-1, -1);
-	}
+        return make_tuple(-1, -1);
+    }
 };
 
 //bool ret1 = string_helper::check_palindrome(s1);
