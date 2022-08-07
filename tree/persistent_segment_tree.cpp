@@ -51,6 +51,11 @@ public:
     }
 
 public:
+    value_type process(value_type left_value, value_type right_value)
+    {
+        return (left_value + right_value);
+    }
+
     node_info* init_node()
     {
         node_list.push_back(new node_info(0, nullptr, nullptr));
@@ -71,7 +76,7 @@ public:
 
         if (start == end)
         {
-            new_node->val = node->val + value;
+            new_node->val = process(node->val, value);
         }
         else
         {
@@ -82,7 +87,7 @@ public:
             new_node->left = inner_update(node->left, start, mid, pos, value);
             new_node->right = inner_update(node->right, mid + 1, end, pos, value);
 
-            new_node->val = new_node->left->val + new_node->right->val;
+            new_node->val = process(new_node->left->val, new_node->right->val);
         }
 
         return new_node;
@@ -106,7 +111,7 @@ public:
         if (left <= start && end <= right) return node->val;
 
         int mid = (start + end) / 2;
-        return inner_query(node->left, start, mid, left, right) + inner_query(node->right, mid + 1, end, left, right);
+        return process(inner_query(node->left, start, mid, left, right), inner_query(node->right, mid + 1, end, left, right));
     }
 };
 

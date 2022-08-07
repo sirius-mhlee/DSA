@@ -32,6 +32,11 @@ public:
         {
             digit_value[ch] = ch - 'A' + 10;
         }
+
+        for (char ch = 'a'; ch <= 'z'; ch++)
+        {
+            digit_value[ch] = ch - 'a' + 10;
+        }
     }
 
 public:

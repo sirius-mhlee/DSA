@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -35,6 +37,11 @@ public:
     }
 
 public:
+    value_type process(value_type left_value, value_type right_value)
+    {
+        return max(left_value, right_value);
+    }
+
     void init()
     {
         inner_init(1, 0, data_count - 1);
@@ -50,7 +57,7 @@ public:
         else
         {
             int mid = (start + end) / 2;
-            return tree[node] = max(inner_init(node * 2, start, mid), inner_init(node * 2 + 1, mid + 1, end));
+            return tree[node] = process(inner_init(node * 2, start, mid), inner_init(node * 2 + 1, mid + 1, end));
         }
     }
 
@@ -62,7 +69,7 @@ public:
         while (node > 1)
         {
             node /= 2;
-            tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
+            tree[node] = process(tree[node * 2], tree[node * 2 + 1]);
         }
     }
 
@@ -82,13 +89,13 @@ public:
         if (left <= start && end <= right) return tree[node];
 
         int mid = (start + end) / 2;
-        return max(inner_query(node * 2, start, mid, left, right), inner_query(node * 2 + 1, mid + 1, end, left, right));
+        return process(inner_query(node * 2, start, mid, left, right), inner_query(node * 2 + 1, mid + 1, end, left, right));
     }
 };
 
-//segment_tree<int> seg(N);
+//segment_tree<long long> seg(N);
 //seg.data_list[i] = val;
 //seg.init();
 //seg.update(pos, val);
-//int ret1 = seg.query(pos);
-//int ret2 = seg.query(left, right);
+//long long ret1 = seg.query(pos);
+//long long ret2 = seg.query(left, right);
