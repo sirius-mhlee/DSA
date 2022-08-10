@@ -17,6 +17,9 @@ template<typename value_type>
 class segment_tree
 {
 public:
+    const value_type INIT_VALUE = 0;
+
+public:
     int data_count;
 
     vector<int> data_idx;
@@ -29,11 +32,11 @@ public:
         : data_count(_data_count), data_idx(), data_list(), tree()
     {
         data_idx.assign(data_count, -1);
-        data_list.assign(data_count, 0);
+        data_list.assign(data_count, INIT_VALUE);
 
         int height = (int)ceil(log2(data_count));
         int tree_size = (1 << (height + 1));
-        tree.assign(tree_size, 0);
+        tree.assign(tree_size, INIT_VALUE);
     }
 
 public:
@@ -85,7 +88,7 @@ public:
 
     value_type inner_query(int node, int start, int end, int left, int right)
     {
-        if (right < start || end < left) return 0;
+        if (right < start || end < left) return INIT_VALUE;
         if (left <= start && end <= right) return tree[node];
 
         int mid = (start + end) / 2;

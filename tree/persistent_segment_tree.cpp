@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -14,6 +16,9 @@ using namespace std;
 template<typename value_type>
 class persistent_segment_tree
 {
+public:
+    const value_type INIT_VALUE = 0;
+
 public:
     class node_info
     {
@@ -58,7 +63,7 @@ public:
 
     node_info* init_node()
     {
-        node_list.push_back(new node_info(0, nullptr, nullptr));
+        node_list.push_back(new node_info(INIT_VALUE, nullptr, nullptr));
         return node_list.back();
     }
 
@@ -105,9 +110,9 @@ public:
 
     value_type inner_query(node_info* node, int start, int end, int left, int right)
     {
-        if (node == nullptr) return 0;
+        if (node == nullptr) return INIT_VALUE;
 
-        if (right < start || end < left) return 0;
+        if (right < start || end < left) return INIT_VALUE;
         if (left <= start && end <= right) return node->val;
 
         int mid = (start + end) / 2;
