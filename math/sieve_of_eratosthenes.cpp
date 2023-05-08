@@ -30,11 +30,18 @@ public:
         {
             if (is_prime[i])
             {
-                prime_list.push_back(i);
                 for (value_type j = i * i; j <= limit; j += i)
                 {
                     is_prime[j] = false;
                 }
+            }
+        }
+
+        for (value_type i = 2; i <= limit; i++)
+        {
+            if (is_prime[i])
+            {
+                prime_list.push_back(i);
             }
         }
     }
