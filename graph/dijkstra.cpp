@@ -8,6 +8,7 @@
 #include <functional>
 
 #include <vector>
+#include <deque>
 #include <queue>
 
 using namespace std;
@@ -33,12 +34,15 @@ public:
     };
 
 public:
+    int vertex_count;
+
     vector<vector<edge_info>> adj;
     vector<value_type> dist;
+    deque<int> path;
 
 public:
-    dijkstra(int vertex_count)
-        : adj(), dist()
+    dijkstra(int _vertex_count)
+        : vertex_count(_vertex_count), adj(), dist(), path()
     {
         adj.assign(vertex_count, vector<edge_info>());
         dist.assign(vertex_count, INF);
@@ -52,6 +56,11 @@ public:
 
     void process(int start, int end)
     {
+        dist.assign(vertex_count, INF);
+        path.clear();
+
+        vector<int> prev(vertex_count, -1);
+
         priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
         dist[start] = 0;
         pq.push(make_pair(0, start));
@@ -71,11 +80,21 @@ public:
 
                 if (next_dist < dist[next_node])
                 {
+                    prev[next_node] = curr_node;
+
                     dist[next_node] = next_dist;
                     pq.push(make_pair(next_dist, next_node));
                 }
             }
         }
+
+        int curr_node = end;
+        while (prev[curr_node] != -1)
+        {
+            path.push_front(curr_node);
+            curr_node = prev[curr_node];
+        }
+        path.push_front(start);
     }
 };
 
@@ -85,3 +104,4 @@ public:
 //int end = N - 1;
 //ds.process(start, end);
 //int ret = ds.dist[end];
+//deque<int> shortest_path = ds.path;
