@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -38,14 +40,15 @@ public:
 
     vector<vector<edge_info>> adj;
     vector<value_type> dist;
-    deque<int> path;
+    vector<int> prev;
 
 public:
     dijkstra(int _vertex_count)
-        : vertex_count(_vertex_count), adj(), dist(), path()
+        : vertex_count(_vertex_count), adj(), dist(), prev()
     {
         adj.assign(vertex_count, vector<edge_info>());
         dist.assign(vertex_count, INF);
+        prev.assign(vertex_count, -1);
     }
 
 public:
@@ -54,12 +57,10 @@ public:
         adj[from].push_back(edge_info(to, cost));
     }
 
-    void process(int start, int end)
+    void process(int start)
     {
         dist.assign(vertex_count, INF);
-        path.clear();
-
-        vector<int> prev(vertex_count, -1);
+        prev.assign(vertex_count, -1);
 
         priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
         dist[start] = 0;
@@ -87,6 +88,11 @@ public:
                 }
             }
         }
+    }
+
+    deque<int> get_path(int end)
+    {
+        deque<int> path;
 
         int curr_node = end;
         while (prev[curr_node] != -1)
@@ -94,7 +100,9 @@ public:
             path.push_front(curr_node);
             curr_node = prev[curr_node];
         }
-        path.push_front(start);
+        path.push_front(curr_node);
+
+        return path;
     }
 };
 
@@ -102,6 +110,6 @@ public:
 //ds.create_edge(u, v, c);
 //int start = N - 2;
 //int end = N - 1;
-//ds.process(start, end);
+//ds.process(start);
 //int ret = ds.dist[end];
-//deque<int> shortest_path = ds.path;
+//deque<int> shortest_path = ds.get_path(end);
