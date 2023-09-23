@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -15,18 +17,21 @@ template<typename value_type>
 class segment_tree_lazy
 {
 public:
-    class lazy_info
-    {
-    public:
-        bool flag;
+    const value_type INIT_VALUE = 0;
 
-        value_type val;
+public:
+	class lazy_info
+	{
+	public:
+		bool flag;
 
-    public:
-        lazy_info(bool _flag, value_type _val)
-            : flag(_flag), val(_val)
-        {}
-    };
+		value_type val;
+
+	public:
+		lazy_info(bool _flag, value_type _val)
+			: flag(_flag), val(_val)
+		{}
+	};
 
 public:
     int data_count;
@@ -35,16 +40,23 @@ public:
     vector<lazy_info> lazy;
     vector<value_type> tree;
 
+    function<value_type(value_type, value_type)> process;
+    function<value_type(value_type, value_type)> lazy_process;
+    function<value_type(value_type, value_type, value_type, value_type)> tree_process;
+
 public:
-    segment_tree_lazy(int _data_count)
-        : data_count(_data_count), data_list(), lazy(), tree()
+    segment_tree_lazy(int _data_count,
+                    function<value_type(value_type, value_type)> _process,
+                    function<value_type(value_type, value_type)> _lazy_process,
+                    function<value_type(value_type, value_type, value_type, value_type)> _tree_process)
+        : data_count(_data_count), data_list(), lazy(), tree(), process(_process), lazy_process(_lazy_process), tree_process(_tree_process)
     {
-        data_list.assign(data_count, 0);
+        data_list.assign(data_count, INIT_VALUE);
 
         int height = (int)ceil(log2(data_count));
-        int tree_size = (1 << (height + 1));
-        lazy.assign(tree_size, lazy_info(false, 0));
-        tree.assign(tree_size, 0);
+	    int tree_size = (1 << (height + 1));
+        lazy.assign(tree_size, lazy_info(false, INIT_VALUE));
+	    tree.assign(tree_size, INIT_VALUE);
     }
 
 public:
@@ -62,7 +74,7 @@ public:
         else
         {
             int mid = (start + end) / 2;
-            return tree[node] = inner_init(node * 2, start, mid) + inner_init(node * 2 + 1, mid + 1, end);
+            return tree[node] = process(inner_init(node * 2, start, mid), inner_init(node * 2 + 1, mid + 1, end));
         }
     }
 
@@ -73,15 +85,15 @@ public:
             if (start != end)
             {
                 lazy[node * 2].flag = true;
-                lazy[node * 2].val += lazy[node].val;
+				lazy[node * 2].val = lazy_process(lazy[node * 2].val, lazy[node].val);
 
-                lazy[node * 2 + 1].flag = true;
-                lazy[node * 2 + 1].val += lazy[node].val;
+				lazy[node * 2 + 1].flag = true;
+                lazy[node * 2 + 1].val = lazy_process(lazy[node * 2 + 1].val, lazy[node].val);
             }
 
-            tree[node] += (end - start + 1) * lazy[node].val;
+            tree[node] = tree_process(start, end, tree[node], lazy[node].val);
             lazy[node].flag = false;
-            lazy[node].val = 0;
+			lazy[node].val = INIT_VALUE;
         }
     }
 
@@ -103,7 +115,7 @@ public:
         if (left <= start && end <= right)
         {
             lazy[node].flag = true;
-            lazy[node].val += val;
+			lazy[node].val = lazy_process(lazy[node].val, val);
             propagate(node, start, end);
             return;
         }
@@ -112,7 +124,7 @@ public:
         inner_update(node * 2, start, mid, left, right, val);
         inner_update(node * 2 + 1, mid + 1, end, left, right, val);
 
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        tree[node] = process(tree[node * 2], tree[node * 2 + 1]);
     }
 
     value_type query(int pos)
@@ -129,15 +141,15 @@ public:
     {
         propagate(node, start, end);
 
-        if (right < start || end < left) return 0;
+        if (right < start || end < left) return INIT_VALUE;
         if (left <= start && end <= right) return tree[node];
 
         int mid = (start + end) / 2;
-        return inner_query(node * 2, start, mid, left, right) + inner_query(node * 2 + 1, mid + 1, end, left, right);
+        return process(inner_query(node * 2, start, mid, left, right), inner_query(node * 2 + 1, mid + 1, end, left, right));
     }
 };
 
-//segment_tree_lazy<int> seg(N);
+//segment_tree_lazy<int> seg(N, func, lazy_func, tree_func);
 //seg.data_list[i] = val;
 //seg.init();
 //seg.update(pos, val);

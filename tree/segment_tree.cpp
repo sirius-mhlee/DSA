@@ -27,9 +27,11 @@ public:
 
     vector<value_type> tree;
 
+    function<value_type(value_type, value_type)> process;
+
 public:
-    segment_tree(int _data_count)
-        : data_count(_data_count), data_idx(), data_list(), tree()
+    segment_tree(int _data_count, function<value_type(value_type, value_type)> _process)
+        : data_count(_data_count), data_idx(), data_list(), tree(), process(_process)
     {
         data_idx.assign(data_count, -1);
         data_list.assign(data_count, INIT_VALUE);
@@ -40,11 +42,6 @@ public:
     }
 
 public:
-    value_type process(value_type left_value, value_type right_value)
-    {
-        return max(left_value, right_value);
-    }
-
     void init()
     {
         inner_init(1, 0, data_count - 1);
@@ -96,7 +93,7 @@ public:
     }
 };
 
-//segment_tree<long long> seg(N);
+//segment_tree<long long> seg(N, func);
 //seg.data_list[i] = val;
 //seg.init();
 //seg.update(pos, val);

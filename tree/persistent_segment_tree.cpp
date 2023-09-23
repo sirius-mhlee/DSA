@@ -40,9 +40,11 @@ public:
     vector<node_info*> node_list;
     vector<node_info*> tree;
 
+    function<value_type(value_type, value_type)> process;
+
 public:
-    persistent_segment_tree(int _data_count)
-        : data_count(_data_count), node_list(), tree()
+    persistent_segment_tree(int _data_count, function<value_type(value_type, value_type)> _process)
+        : data_count(_data_count), node_list(), tree(), process(_process)
     {
         tree.push_back(init_node());
     }
@@ -56,11 +58,6 @@ public:
     }
 
 public:
-    value_type process(value_type left_value, value_type right_value)
-    {
-        return (left_value + right_value);
-    }
-
     node_info* init_node()
     {
         node_list.push_back(new node_info(INIT_VALUE, nullptr, nullptr));
@@ -120,7 +117,7 @@ public:
     }
 };
 
-//persistent_segment_tree<long long> pst(1e5 + 1);
+//persistent_segment_tree<long long> pst(1e5 + 1, func);
 //int tree_idx = pst.update(pos, val);
 //long long ret1 = pst.query(tree_idx, pos);
 //long long ret2 = pst.query(tree_idx, left, right);
