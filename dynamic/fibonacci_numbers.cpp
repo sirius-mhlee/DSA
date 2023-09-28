@@ -24,20 +24,20 @@ constexpr bool fast_io = false;
 
 int main()
 {
-	if constexpr (fast_io)
-	{
-		ios::sync_with_stdio(false);
-		cin.tie(nullptr);
-		cout.tie(nullptr);
-	}
+    if constexpr (fast_io)
+    {
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
+    }
 
-	int N;
-	cin >> N;
+    int N;
+    cin >> N;
 
     for (int i = 2; i <= N; i++)
-	{
-		cache[i] = cache[i - 1] + cache[i - 2];
-	}
+    {
+        cache[i] = cache[i - 1] + cache[i - 2];
+    }
 
     cout << cache[N];
     

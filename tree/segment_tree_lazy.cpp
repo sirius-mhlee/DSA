@@ -20,18 +20,18 @@ public:
     const value_type INIT_VALUE = 0;
 
 public:
-	class lazy_info
-	{
-	public:
-		bool flag;
+    class lazy_info
+    {
+    public:
+        bool flag;
 
-		value_type val;
+        value_type val;
 
-	public:
-		lazy_info(bool _flag, value_type _val)
-			: flag(_flag), val(_val)
-		{}
-	};
+    public:
+        lazy_info(bool _flag, value_type _val)
+            : flag(_flag), val(_val)
+        {}
+    };
 
 public:
     int data_count;
@@ -54,9 +54,9 @@ public:
         data_list.assign(data_count, INIT_VALUE);
 
         int height = (int)ceil(log2(data_count));
-	    int tree_size = (1 << (height + 1));
+        int tree_size = (1 << (height + 1));
         lazy.assign(tree_size, lazy_info(false, INIT_VALUE));
-	    tree.assign(tree_size, INIT_VALUE);
+        tree.assign(tree_size, INIT_VALUE);
     }
 
 public:
@@ -85,15 +85,15 @@ public:
             if (start != end)
             {
                 lazy[node * 2].flag = true;
-				lazy[node * 2].val = lazy_process(lazy[node * 2].val, lazy[node].val);
+                lazy[node * 2].val = lazy_process(lazy[node * 2].val, lazy[node].val);
 
-				lazy[node * 2 + 1].flag = true;
+                lazy[node * 2 + 1].flag = true;
                 lazy[node * 2 + 1].val = lazy_process(lazy[node * 2 + 1].val, lazy[node].val);
             }
 
             tree[node] = tree_process(start, end, tree[node], lazy[node].val);
             lazy[node].flag = false;
-			lazy[node].val = INIT_VALUE;
+            lazy[node].val = INIT_VALUE;
         }
     }
 
@@ -115,7 +115,7 @@ public:
         if (left <= start && end <= right)
         {
             lazy[node].flag = true;
-			lazy[node].val = lazy_process(lazy[node].val, val);
+            lazy[node].val = lazy_process(lazy[node].val, val);
             propagate(node, start, end);
             return;
         }
