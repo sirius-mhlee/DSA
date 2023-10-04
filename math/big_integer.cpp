@@ -14,7 +14,7 @@ using namespace std;
 class big_integer
 {
 private:
-    const long long FLOOR_SQRT_LLONG_MAX = 3037000499;
+    const string FLOOR_SQRT_LLONG_MAX{"3037000499"};
 
 public:
     char sign;
@@ -63,12 +63,12 @@ private:
 
     static void add_leading_zeroes(string& value, size_t zero_count)
     {
-        value = string(zero_count, '0') + value;
+        value.insert(0, string(zero_count, '0'));
     }
 
     static void add_trailing_zeroes(string& value, size_t zero_count)
     {
-        value += string(zero_count, '0');
+        value.append(string(zero_count, '0'));
     }
 
     static tuple<string, string> get_larger_and_smaller(const string& value1, const string& value2)
@@ -196,10 +196,12 @@ public:
         for (int i = static_cast<int>(larger.size() - 1); i >= 0; i--)
         {
             int sum = (larger[i] - '0') + (smaller[i] - '0') + carry;
-            result.value = to_string(sum % 10) + result.value;
+            result.value.push_back((sum % 10) + '0');
             carry = sum / 10;
         }
-        if (carry != 0) result.value = to_string(carry) + result.value;
+        if (carry != 0) result.value.push_back(carry + '0');
+
+        reverse(result.value.begin(), result.value.end());
 
         if ((sign == '-') && (result.value != "0")) result.sign = '-';
 
@@ -263,8 +265,10 @@ public:
 
                 diff += 10;
             }
-            result.value = to_string(diff) + result.value;
+            result.value.push_back(diff + '0');
         }
+
+        reverse(result.value.begin(), result.value.end());
 
         big_integer::strip_leading_zeroes(result.value);
 
@@ -281,7 +285,7 @@ public:
 
         big_integer product;
 
-        if (big_integer::abs(*this) <= big_integer(to_string(FLOOR_SQRT_LLONG_MAX)) && big_integer::abs(num) <= big_integer(to_string(FLOOR_SQRT_LLONG_MAX)))
+        if (big_integer::abs(*this) <= big_integer(FLOOR_SQRT_LLONG_MAX) && big_integer::abs(num) <= big_integer(FLOOR_SQRT_LLONG_MAX))
         {
             product = big_integer(to_string(stoll(value) * stoll(num.value)));
         }
