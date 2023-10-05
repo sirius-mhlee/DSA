@@ -33,6 +33,12 @@ public:
         edge_info(int _to, value_type _cost)
             : to(_to), cost(_cost)
         {}
+
+    public:
+        bool operator<(const edge_info& o) const
+        {
+            return cost > o.cost;
+        }
     };
 
 public:
@@ -59,24 +65,32 @@ public:
 
     void process(int start)
     {
+        for (int i = 0; i < vertex_count; i++)
+        {
+            sort(adj[i].begin(), adj[i].end(), [](const edge_info& l, const edge_info& r)
+            {
+                return l.cost < r.cost;
+            });
+        }
+        
         dist.assign(vertex_count, INF);
         prev.assign(vertex_count, -1);
 
-        priority_queue<pair<value_type, int>, vector<pair<value_type, int>>, greater<pair<value_type, int>>> pq;
+        priority_queue<edge_info> pq;
         dist[start] = 0;
-        pq.push(make_pair(0, start));
+        pq.push(edge_info(start, 0));
 
         while (!pq.empty())
         {
-            value_type curr_dist = pq.top().first;
-            int curr_node = pq.top().second;
+            value_type curr_dist = pq.top().cost;
+            int curr_node = pq.top().to;
             pq.pop();
 
             if (curr_dist > dist[curr_node]) continue;
 
             for (edge_info next : adj[curr_node])
             {
-                int next_dist = curr_dist + next.cost;
+                value_type next_dist = curr_dist + next.cost;
                 int next_node = next.to;
 
                 if (next_dist < dist[next_node])
@@ -84,7 +98,7 @@ public:
                     prev[next_node] = curr_node;
 
                     dist[next_node] = next_dist;
-                    pq.push(make_pair(next_dist, next_node));
+                    pq.push(edge_info(next_node, next_dist));
                 }
             }
         }
