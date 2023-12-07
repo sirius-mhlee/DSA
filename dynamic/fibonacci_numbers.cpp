@@ -16,20 +16,11 @@ using namespace std;
 const int cache_limit = 20 + 1;
 array<int, cache_limit> cache{0, 1};
 
-#ifdef ONLINE_JUDGE
-constexpr bool fast_io = true;
-#else
-constexpr bool fast_io = false;
-#endif
-
 int main()
 {
-    if constexpr (fast_io)
-    {
-        ios::sync_with_stdio(false);
-        cin.tie(nullptr);
-        cout.tie(nullptr);
-    }
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
     int N;
     cin >> N;
@@ -41,6 +32,5 @@ int main()
 
     cout << cache[N];
     
-    cout << endl;
     return 0;
 }
