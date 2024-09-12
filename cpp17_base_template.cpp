@@ -17,5 +17,10 @@ int main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
+    cout.setf(ios::fixed);
+    cout.precision(10);
+
+    cout.unsetf(ios::fixed);
+
     return 0;
 }
