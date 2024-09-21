@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -10,13 +12,13 @@
 using namespace std;
 
 template<typename value_type>
-class ter_search
+class tern_search
 {
 public:
     value_type result;
 
 public:
-    ter_search(value_type lo, value_type hi)
+    tern_search(value_type lo, value_type hi)
         : result(0)
     {
         while (hi - lo >= 3)
@@ -48,5 +50,5 @@ public:
     }
 };
 
-//ter_search<long long> ts(lo, hi);
+//tern_search<long long> ts(lo, hi);
 //long long ret = ts.result;

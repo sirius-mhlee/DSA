@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -12,31 +14,31 @@
 using namespace std;
 
 template<typename value_type>
-class parallel_bi_search
+class parallel_bin_search
 {
 public:
-    class bi_search_info
+    class bin_search_info
     {
     public:
         value_type lo;
         value_type hi;
 
     public:
-        bi_search_info(value_type _lo, value_type _hi)
+        bin_search_info(value_type _lo, value_type _hi)
             : lo(_lo), hi(_hi)
         {}
     };
 
 public:
-    vector<bi_search_info> bs_info_list;
+    vector<bin_search_info> bs_info_list;
     vector<value_type> result_list;
 
 public:
-    parallel_bi_search(int bi_search_size, value_type lo, value_type hi)
+    parallel_bin_search(int bin_search_size, value_type lo, value_type hi)
         : bs_info_list(), result_list()
     {
-        bs_info_list.assign(bi_search_size, bi_search_info(lo, hi));
-        result_list.assign(bi_search_size, -1);
+        bs_info_list.assign(bin_search_size, bin_search_info(lo, hi));
+        result_list.assign(bin_search_size, -1);
 
         while (true)
         {
@@ -44,7 +46,7 @@ public:
 
             vector<vector<int>> cand_bs_info_inv(hi, vector<int>());
 
-            for (int i = 0; i < bi_search_size; i++)
+            for (int i = 0; i < bin_search_size; i++)
             {
                 if (bs_info_list[i].hi - bs_info_list[i].lo >= 2)
                 {
@@ -96,5 +98,5 @@ public:
     }
 };
 
-//parallel_bi_search<long long> pbs(N, lo - 1, hi + 1);
+//parallel_bin_search<long long> pbs(N, lo - 1, hi + 1);
 //long long ret = pbs.result_list[i];

@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cassert>
 #include <cmath>
 #include <complex>
+#include <chrono>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -10,13 +12,13 @@
 using namespace std;
 
 template<typename value_type>
-class bi_search
+class bin_search
 {
 public:
     value_type result;
 
 public:
-    bi_search(value_type lo, value_type hi)
+    bin_search(value_type lo, value_type hi)
         : result(0)
     {
         while (hi - lo >= 2)
@@ -57,5 +59,5 @@ public:
     }
 };
 
-//bi_search<long long> bs(lo, hi);
+//bin_search<long long> bs(lo, hi);
 //long long ret = bs.result;
