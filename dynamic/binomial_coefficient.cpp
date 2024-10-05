@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const int cache_limit = 10 + 1;
+const int cache_limit{10 + 1};
 array<array<int, cache_limit>, cache_limit> cache{};
 
 int main()
@@ -22,7 +22,7 @@ int main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    int N, K;
+    int N{}, K{};
     cin >> N >> K;
 
     for (int i = 0; i <= N; i++)
