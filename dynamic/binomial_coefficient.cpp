@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const int cache_limit{10 + 1};
+const int cache_limit = 10 + 1;
 array<array<int, cache_limit>, cache_limit> cache{};
 
 int main()
